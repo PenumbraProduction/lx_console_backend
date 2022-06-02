@@ -1,0 +1,27 @@
+#main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	flex-direction: row;
+}
+
+.channel {
+	width: 200px;
+	height: 600px;
+	border: 3px solid black;
+	position: relative;
+	background-color: darkgray;
+}
+
+.channelValue {
+    font-size: 2em;
+	width: 100%;
+	display: block;
+	font-family: arial;
+	font-size: 12px;
+	background-color: lightseagreen;
+	color: black;
+	position: absolute;
+	bottom: 0;
+}

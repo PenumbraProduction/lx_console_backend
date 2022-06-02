@@ -1,0 +1,37 @@
+{
+  "name": "lx_console_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "tsc --watch -p tsconfig.json",
+    "dev-browser": "tsc --watch -p tsconfig.browser.json",
+    "dev-webpack": "webpack --watch --mode development",
+    "dist": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LordFarquhar/lx_console_backend.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LordFarquhar/lx_console_backend/issues"
+  },
+  "homepage": "https://github.com/LordFarquhar/lx_console_backend#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.37",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.2",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "@types/serialport": "^8.0.2",
+    "events": "^3.3.0",
+    "serialport": "^8.0.8"
+  }
+}
