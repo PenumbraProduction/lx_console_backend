@@ -13,12 +13,25 @@ for (let i = 0; i < group.length; i++) {
 	updatePreview(num, transition.initial)
 	transition.on(myDmx.TimingEvents.TRIGGER, (t) => console.log(`t${num}: Triggered`));
 	transition.on(myDmx.TimingEvents.START, (t) => console.log(`t${num}: Started`));
-	transition.on(myDmx.TimingEvents.UPDATE, (t) => updatePreview(num, t.value)); //console.log(`t${num}: ${t.value}`)
-	transition.on(myDmx.TimingEvents.END, (t) => console.log(`t${num} Ended`));
-	transition.on(myDmx.TimingEvents.PAUSED, (t) => console.log(`t${num} Paused`));
-	transition.on(myDmx.TimingEvents.RESUMED, (t) => console.log(`t${num} Resumed`));
-	transition.on(myDmx.TimingEvents.CANCELLED, (t) => console.log(`t${num} Cancelled`));
-	transition.on(myDmx.TimingEvents.WARNING, (t, dt) => console.log(`t${num} Running ${dt}ms behind expected value, skipping...`));
+	transition.on(myDmx.TimingEvents.UPDATE, (t) => updatePreview(num, t.value)); //console.log(`t${num}: ${transition.value}`)
+	transition.on(myDmx.TimingEvents.WARNING, (t, driftStats) =>
+		console.log(
+			`t${num}: Running Behind: ${driftStats.delta}ms, ${driftStats.remainingFrames} remaining frames, ${driftStats.completeFramesPassed} frames passed`
+		)
+	);
+	transition.on(myDmx.TimingEvents.JUMPING, (t, jumpStats) =>
+		console.log(
+			`t${num}: Jumping: ${jumpStats.jumpFrames} frames, ${jumpStats.jumpValue} raw value, ${jumpStats.jumpTime}ms`
+		)
+	);
+	transition.on(myDmx.TimingEvents.END, () => console.log(`t${num}: ended`));
+	transition.on(myDmx.TimingEvents.PAUSED, () => {
+		console.log(`t${num}: Paused`);
+	});
+	transition.on(myDmx.TimingEvents.RESUMED, () => {
+		console.log(`t${num}: Resumed`);
+	});
+	transition.on(myDmx.TimingEvents.CANCELLED, () => console.log(`t${num}: Cancelled`));
 }
 
 const tg = new myDmx.TransitionGroup(group);
@@ -39,8 +52,9 @@ tg.on(myDmx.TimingEvents.CANCELLED, (tg) => console.log("Cancelled"));
 tg.trigger();
 console.time("timer");
 
-setTimeout(() => tg.pause(), 1500);
-setTimeout(() => tg.resume(), 5000);
+// uncomment to emulate pausing
+// setTimeout(() => tg.pause(), 1500);
+// setTimeout(() => tg.resume(), 5000);
 
 function updatePreview(num, val) {
 	document.querySelectorAll(`[data-previewsChannel="${num}"]`).forEach((ch) => {
