@@ -15,8 +15,8 @@ export default class GroupManager {
 	}
 
 	moveGroup(id1: number, id2: number):GroupManager {
-		if (!this._map.has(id1)) return;
-		if (this._map.has(id2)) return;
+		if (!this._map.has(id1)) throw new Error(`Cannot move group, source group ${id1} does not exist`);
+		if (this._map.has(id2)) throw new MapOverlapError(`Cannot move group, GroupManager Map entry '${id2}' already exists`);
 		const g = this._map.get(id1);
 		g._setId(id2)
 		this._map.set(id2, g);

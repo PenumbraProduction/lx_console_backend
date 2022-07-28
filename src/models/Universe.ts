@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { wait } from "../util/time";
-import { UniverseData } from "../../types/Types";
+import {UniverseData} from "../types";
 
 export interface IUniverseDriver extends EventEmitter {
 	init(serialPortName: string): Promise<void>;

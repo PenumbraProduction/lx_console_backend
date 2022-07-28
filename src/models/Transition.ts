@@ -1,5 +1,27 @@
 import { EventEmitter } from "events";
-import { TimingStates, TimingEvents } from "../../types/Types";
+
+enum TimingStates {
+	UNTRIGGERED,
+	UNSTARTED,
+	RUNNING,
+	PAUSED,
+	CANCELLED,
+	ENDED, // both ended naturally and ended "now"
+	RECALCULATING // when any "delta" values have been changed while running
+}
+
+enum TimingEvents {
+	TRIGGER = "trigger",
+	START = "start",
+	UPDATE = "update",
+	WARNING = "warning",
+	JUMPING = "jumping",
+	END = "end",
+	PAUSED = "paused",
+	RESUMED = "resumed",
+	CANCELLED = "cancelled"
+}
+
 
 // ? create a skip delay method that immediately starts changing values no matter how long the delay has been going for
 

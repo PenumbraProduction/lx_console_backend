@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { DmxAddressRange, DefinedProfile } from "../../../types/Types";
+import { DmxAddressRange, DefinedProfile } from "../../types";
 import { DmxRangeOverlapError, MapOverlapError } from "../../Errors/OverlapError";
 
 import Channel from "./Channel";

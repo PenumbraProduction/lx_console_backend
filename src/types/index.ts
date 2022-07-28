@@ -1,4 +1,4 @@
-export type USB_Device = {
+export declare type USB_Device = {
 	path: string; // path: 'COM9',
 	manufacturer: string; // manufacturer: 'FTDI',
 	serialNumber: string; // serialNumber: 'AL05O8JJ',
@@ -11,7 +11,7 @@ export type USB_Device = {
 
 //
 
-export type UniverseData = {
+export declare type UniverseData = {
 	[key: number]: number;
 };
 
@@ -78,32 +78,8 @@ export declare type DmxAddressRange = {
 
 //
 
-export type GroupOptions = {
+export declare type GroupOptions = {
 	id: number;
 	name?: string;
 	channels?: Set<number>;
 };
-
-//
-
-export enum TimingStates {
-	UNTRIGGERED,
-	UNSTARTED,
-	RUNNING,
-	PAUSED,
-	CANCELLED,
-	ENDED, // both ended naturally and ended "now"
-	RECALCULATING // when any "delta" values have been changed while running
-}
-
-export enum TimingEvents {
-	TRIGGER = "trigger",
-	START = "start",
-	UPDATE = "update",
-	WARNING = "warning",
-	JUMPING = "jumping",
-	END = "end",
-	PAUSED = "paused",
-	RESUMED = "resumed",
-	CANCELLED = "cancelled"
-}

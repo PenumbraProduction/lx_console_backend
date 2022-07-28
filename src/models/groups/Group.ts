@@ -1,4 +1,4 @@
-import { GroupOptions } from "../../../types/Types";
+import { GroupOptions } from "../../types";
 
 const DEFAULT_GROUP_NAME = "Group #";
 

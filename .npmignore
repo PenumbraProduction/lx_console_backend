@@ -1,0 +1,6 @@
+src
+test
+docs
+tsconfig.json
+tslint.json
+.prettierrc

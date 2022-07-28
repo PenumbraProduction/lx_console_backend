@@ -1,4 +1,4 @@
-import { USB_Device } from "../../types/Types";
+import { USB_Device } from "../types";
 import { SerialPort } from "serialport";
 
 import { Universe } from "./Universe";
@@ -9,7 +9,7 @@ import PlaybackManager from "./playbacks/PlaybackManager";
 
 export class Desk {
 	universe: Universe;
-	interfacePort: USB_Device;
+	interfacePort?: USB_Device;
 	patch: PatchManager;
     groups: GroupManager;
     cues: CueManager;

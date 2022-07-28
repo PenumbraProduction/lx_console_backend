@@ -1,7 +1,6 @@
 const util = require("util");
 
-const { Desk } = require("../out/src/models/Desk");
-const { Group } = require("../out/src/models/groups/Group");
+const {Desk, Group} = require("../out");
 
 const desk = new Desk();
 

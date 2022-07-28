@@ -1,4 +1,4 @@
-import { DefinedProfile, DmxAddressRange, FixtureChannel } from "../../../types/Types";
+import { DefinedProfile, DmxAddressRange, FixtureChannel } from "../../types";
 
 export default class Channel {
     id: number;

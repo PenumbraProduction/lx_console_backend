@@ -1,4 +1,4 @@
-import { UniverseData } from "../../../types/Types";
+import { UniverseData } from "../../types";
 
 export class Cue {
 	id: number;
