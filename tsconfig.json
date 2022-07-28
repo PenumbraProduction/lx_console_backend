@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
         "allowJs": true,
+        "target": "ES2015",
 		"module": "CommonJS",
-        "moduleResolution": "Node",
-		"skipLibCheck": true,
+
+        "skipLibCheck": true,
         "noImplicitAny": true,
         "experimentalDecorators": true,
+        "preserveConstEnums": true,
         "emitDecoratorMetadata": true,
         "sourceMap": true,
         "baseUrl": ".",
@@ -19,6 +21,6 @@
         }
     },
     "include": [
-        "src/*.ts"
+        "src/**/*.ts"
     ]
 }

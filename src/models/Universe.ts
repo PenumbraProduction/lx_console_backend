@@ -1,18 +1,16 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { wait } from "../util/time";
-
-export type UniverseData = {
-	[key: number]: number;
-};
+import { UniverseData } from "../../types/Types";
 
 export interface IUniverseDriver extends EventEmitter {
-	init(): Promise<void>;
+	init(serialPortName: string): Promise<void>;
 
 	get(channel: number): number;
 
 	update(channel: number, value: number): void;
-	updateSelect(channels: UniverseData, extraData?: any): void;
+	updateSelect(channels: Array<number>, val: number): void;
+	updateEach(channels: UniverseData): void;
 	updateAll(value: number): void;
 
 	close(): Promise<void> | void;
@@ -23,24 +21,29 @@ export class Universe extends EventEmitter implements IUniverseDriver {
 
 	private _readyToWrite: boolean;
 	private _serialPort!: SerialPort.SerialPort;
-	private readonly _serialPortName: string;
+	private _serialPortName: string;
 
 	private readonly _sendInterval: number;
 	private _intervalHandle: any | undefined = undefined;
 
-	constructor(serialPortName: string) {
+	constructor() {
 		super();
 
 		this._universeBuffer = Buffer.alloc(513);
 
-		this._serialPortName = serialPortName;
-
 		this._readyToWrite = false;
 
-		this._sendInterval = 46;
+		this._sendInterval = 44;
 	}
 
-	init(): Promise<void> {
+	getUniverseBuffer(): Buffer {
+		// ? is this inefficient? Could I not just send whatever value is in index 0 without any effect?
+		return Buffer.concat([Buffer.from([0]), this._universeBuffer.slice(1)]);
+	}
+
+	init(serialPortName: string): Promise<void> {
+		this._serialPortName = serialPortName;
+
 		return new Promise((resolve, reject) => {
 			this._serialPort = new SerialPort.SerialPort(
 				{
@@ -102,8 +105,7 @@ export class Universe extends EventEmitter implements IUniverseDriver {
 		this._serialPort.set({ brk: false, rts: false });
 		await wait(1);
 
-		// ? is this inefficient? Could I not just send whatever value is in index 0 without any effect?
-		const dataToWrite = Buffer.concat([Buffer.from([0]), this._universeBuffer.slice(1)]);
+		const dataToWrite = this.getUniverseBuffer();
 
 		this._readyToWrite = false;
 		this._serialPort.write(dataToWrite);
@@ -118,17 +120,27 @@ export class Universe extends EventEmitter implements IUniverseDriver {
 
 	update(channel: number, value: number): void {
 		this._universeBuffer[channel] = value;
+		this.emit("bufferUpdate"); // todo: only send specific data that has been updated, instead of relying on entire buffer being re-read
 	}
 
-	updateSelect(channels: UniverseData): void {
+	updateSelect(channels: Array<number>, val: number): void {
+		for (const c of channels) {
+			this._universeBuffer[c] = val;
+		}
+		this.emit("bufferUpdate");
+	}
+
+	updateEach(channels: UniverseData): void {
 		for (const c in channels) {
 			this._universeBuffer[c] = channels[c];
 		}
+		this.emit("bufferUpdate");
 	}
 
 	updateAll(value: number): void {
 		for (let i = 1; i <= 512; i++) {
 			this._universeBuffer[i] = value;
 		}
+		this.emit("bufferUpdate");
 	}
 }

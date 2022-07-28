@@ -1,28 +1,7 @@
 import { EventEmitter } from "events";
+import { TimingStates, TimingEvents } from "../../types/Types";
 
 // ? create a skip delay method that immediately starts changing values no matter how long the delay has been going for
-
-enum TimingStates {
-	UNTRIGGERED,
-	UNSTARTED,
-	RUNNING,
-	PAUSED,
-	CANCELLED,
-	ENDED, // both ended naturally and ended "now"
-	RECALCULATING // when any "delta" values have been changed while running
-}
-
-export enum TimingEvents {
-	TRIGGER = "trigger",
-	START = "start",
-	UPDATE = "update",
-	WARNING = "warning",
-	JUMPING = "jumping",
-	END = "end",
-	PAUSED = "paused",
-	RESUMED = "resumed",
-	CANCELLED = "cancelled"
-}
 
 export class Transition extends EventEmitter {
 	initial: number;
@@ -73,7 +52,7 @@ export class Transition extends EventEmitter {
 
 	// start the transition
 	trigger() {
-		if(this.state !== TimingStates.UNTRIGGERED) return;
+		if (this.state !== TimingStates.UNTRIGGERED) return;
 		this.state = TimingStates.UNSTARTED;
 		this.emit(TimingEvents.TRIGGER, this);
 		if (this.delay) this._startDelay();
@@ -233,7 +212,7 @@ export class TransitionGroup extends EventEmitter {
 	// ?: recalculate longest if updateRunningTime is called on any Transitions (changes to end value are irrelevant, larger or smaller deltaValues are used to reach it in the same set time)
 	// ?: individual transitions would not have that called on them, the only time in which the TIME changes is when an entire group (or anim) must finish early (due to double press or other emergency user input)
 	trigger(): void {
-		if(this.state !== TimingStates.UNTRIGGERED) return;
+		if (this.state !== TimingStates.UNTRIGGERED) return;
 		// find longest (add duration and delay)
 		const longest = this.transitions.reduce((prev, current) =>
 			prev.delay + prev.duration > current.delay + current.duration ? prev : current
@@ -340,7 +319,7 @@ export class Anim extends EventEmitter {
 	}
 
 	trigger(): void {
-		if(this.state !== TimingStates.UNTRIGGERED) return;
+		if (this.state !== TimingStates.UNTRIGGERED) return;
 		// listen to end of transitionGroup
 		const handleEndGroup = () => {
 			this.groups[this.groupIndex].removeListener(TimingEvents.END, handleEndGroup);
