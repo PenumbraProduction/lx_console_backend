@@ -8,12 +8,11 @@ import { GroupManager } from "./groups/GroupManager";
 import { CueManager } from "./cues/CueManager";
 import { PlaybackManager } from "./playbacks/PlaybackManager";
 import { Programmer } from "./Programmer";
-import { CommandLine } from "./CommandLine";
 
 export class Desk extends EventEmitter {
 	universe: Universe;
 	interfacePort?: USB_Device;
-	commandLine: CommandLine;
+
 	programmer: Programmer;
 	patch: PatchManager;
 	groups: GroupManager;
@@ -26,7 +25,6 @@ export class Desk extends EventEmitter {
 		this.universe = new Universe();
 		this.interfacePort = null;
 
-		this.commandLine = new CommandLine();
 		this.programmer = new Programmer();
 		this.patch = new PatchManager();
 		this.groups = new GroupManager();
