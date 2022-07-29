@@ -7,10 +7,14 @@ import { PatchManager } from "./channels/PatchManager";
 import { GroupManager } from "./groups/GroupManager";
 import { CueManager } from "./cues/CueManager";
 import { PlaybackManager } from "./playbacks/PlaybackManager";
+import { Programmer } from "./Programmer";
+import { CommandLine } from "./CommandLine";
 
 export class Desk extends EventEmitter {
 	universe: Universe;
 	interfacePort?: USB_Device;
+	commandLine: CommandLine;
+	programmer: Programmer;
 	patch: PatchManager;
 	groups: GroupManager;
 	cues: CueManager;
@@ -20,29 +24,15 @@ export class Desk extends EventEmitter {
 		super();
 
 		this.universe = new Universe();
+		this.interfacePort = null;
 
+		this.commandLine = new CommandLine();
+		this.programmer = new Programmer();
 		this.patch = new PatchManager();
 		this.groups = new GroupManager();
 		this.cues = new CueManager();
 		this.playbacks = new PlaybackManager();
-
-		// this._attachEventListeners();
 	}
-
-	// private _attachEventListeners() {
-	// 	this.universe.on("bufferUpdate", (data) => {
-	// 		if (!data) data = this.universe.getUniverseBuffer();
-	// 		this.emit("bufferUpdate", data);
-	// 	});
-
-	// 	this.universe.on("serialportClose", () => this.emit("serialportClose"));
-	// 	this.universe.on("serialportEnd", () => this.emit("serialportEnd"));
-	// 	this.universe.on("serialportError", (e: Error) => this.emit("serialportError", e));
-
-	// 	this.patch.on("patchAdd", (channel: Channel) => this.emit("patchAdd", channel));
-	// 	this.patch.on("patchDelete", (id: number) => this.emit("patchDelete", id));
-	// 	this.patch.on("patchMove", (id1: number, id2: number) => this.emit("patchMove", id1, id2));
-	// }
 
 	private findInterfacePort(): Promise<USB_Device> {
 		return new Promise<USB_Device>((resolve, reject) => {
@@ -60,7 +50,6 @@ export class Desk extends EventEmitter {
 		// ! make sure this is always in a separate function so the desk can continue to run just without outputting any DMX to device
 		this.interfacePort = await this.findInterfacePort();
 		await this.universe.init(this.interfacePort.path);
-		this.universe.start();
 		//
 	}
 
