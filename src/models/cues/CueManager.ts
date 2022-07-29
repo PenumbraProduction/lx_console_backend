@@ -1,7 +1,7 @@
 import { MapOverlapError } from "../../Errors/OverlapError";
 import { Cue } from "./Cue";
 
-export default class CueManager {
+export class CueManager {
 	private _map: Map<number, Cue>;
 
 	constructor() {

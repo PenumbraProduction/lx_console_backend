@@ -1,6 +1,6 @@
 const util = require("util");
 
-const {Desk, Group} = require("../out");
+const {Desk, Group } = require("../out");
 
 const desk = new Desk();
 

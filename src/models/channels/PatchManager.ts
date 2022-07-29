@@ -2,9 +2,9 @@ import { EventEmitter } from "events";
 import { DmxAddressRange, DefinedProfile } from "../../types";
 import { DmxRangeOverlapError, MapOverlapError } from "../../Errors/OverlapError";
 
-import Channel from "./Channel";
+import {Channel} from "./Channel";
 
-export default class PatchManager extends EventEmitter {
+export class PatchManager extends EventEmitter {
 	private _map: Map<number, Channel>;
 
 	constructor() {
@@ -39,15 +39,30 @@ export default class PatchManager extends EventEmitter {
 		);
 	}
 
-	addChannel(id: number, profile: DefinedProfile, dmxAddressStart: number) {
+	addChannel(id: number, profile: DefinedProfile, dmxAddressStart: number): PatchManager {
 		const isValid = this.isValid(id, profile, dmxAddressStart);
 		if (isValid === null) {
 			this._map.set(id, new Channel(id, profile, dmxAddressStart));
 		} else throw isValid;
+		this.emit("patchAdd", this._map.get(id));
+		return this;
 	}
 
-	removeChannel(id: number) {
+	moveChannel(id1: number, id2: number): PatchManager {
+		if (!this._map.has(id1)) throw new Error(`Cannot move channel, source channel ${id1} does not exist`);
+		if (this._map.has(id2)) throw new MapOverlapError(`Cannot move channel, PatchManager Map entry '${id2}' already exists`);
+		const ch = this._map.get(id1);
+		ch._setId(id2)
+		this._map.set(id2, ch);
+		this._map.delete(id1);
+		this.emit("patchMove", id1, id2);
+		return this;
+	}
+
+	removeChannel(id: number): PatchManager {
 		this._map.delete(id);
+		this.emit("patchDelete", id);
+		return this;
 	}
 
 	getChannel(id: number): Channel | undefined {

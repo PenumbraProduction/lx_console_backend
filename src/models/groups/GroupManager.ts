@@ -1,7 +1,7 @@
 import { MapOverlapError } from "../../Errors/OverlapError";
 import { Group } from "./Group";
 
-export default class GroupManager {
+export class GroupManager {
 	private _map: Map<number, Group>;
 
 	constructor() {

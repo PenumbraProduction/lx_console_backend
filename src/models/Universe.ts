@@ -63,16 +63,9 @@ export class Universe extends EventEmitter implements IUniverseDriver {
 					}
 				}
 			);
-			this._serialPort.on("close", () => {
-				console.log("SerialPort Closed");
-			});
-			this._serialPort.on("end", () => {
-				console.log("SerialPort Ended");
-			});
-			this._serialPort.on("error", (e) => {
-				console.log("SerialPort Error");
-				console.error(e);
-			});
+			this._serialPort.on("close", () => this.emit("serialportClose"));
+			this._serialPort.on("end", () => this.emit("serialportEnd"));
+			this._serialPort.on("error", (e) => this.emit("serialportError", e));
 		});
 	}
 

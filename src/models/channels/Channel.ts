@@ -1,6 +1,6 @@
 import { DefinedProfile, DmxAddressRange, FixtureChannel } from "../../types";
 
-export default class Channel {
+export class Channel {
     id: number;
     name: string;
     profile: DefinedProfile;
@@ -18,6 +18,11 @@ export default class Channel {
 
         this.output = Buffer.from(new Array(profile.channelModes[profile.options.channelMode].count));
         this.output.fill(-1);
+    }
+
+    _setId(id: number): Channel {
+        this.id = id;
+        return this;
     }
 
     get masterChannel() {
