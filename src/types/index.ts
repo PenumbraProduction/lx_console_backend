@@ -83,3 +83,9 @@ export declare type GroupOptions = {
 	name?: string;
 	channels?: Set<number>;
 };
+
+export declare type CueOptions = {
+	id: number;
+	name?: string;
+	channelData?: UniverseData;
+};

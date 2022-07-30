@@ -1,16 +1,13 @@
 import { GroupOptions } from "../../types";
 
-const DEFAULT_GROUP_NAME = "Group #";
+export const DEFAULT_GROUP_NAME = "Group #";
 
 export class Group {
-	// private options: GroupOptions;
 	id: number;
 	name: string;
 	channels: Set<number>;
 
 	constructor(options: GroupOptions) {
-		// this.options = options; // ? I dont need to store the entire obj if im going to pick everything out
-
 		this.id = options.id;
 		this.name = options.name ? options.name : DEFAULT_GROUP_NAME.replace("#", this.id.toString());
 		this.channels = options.channels ? options.channels : new Set();

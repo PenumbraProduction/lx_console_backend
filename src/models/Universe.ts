@@ -3,7 +3,14 @@ import * as SerialPort from "serialport";
 import { wait } from "../util/time";
 import {UniverseData} from "../types";
 
-export interface IUniverseDriver extends EventEmitter {
+export interface UniverseEmissions {
+	serialportClose: () => void;
+	serialportEnd: () => void;
+	serialportError: (error: Error) => void;
+	bufferUpdate: () => void;
+}
+
+export interface IUniverse extends EventEmitter {
 	init(serialPortName: string): Promise<void>;
 
 	get(channel: number): number;
@@ -16,7 +23,16 @@ export interface IUniverseDriver extends EventEmitter {
 	close(): Promise<void> | void;
 }
 
-export class Universe extends EventEmitter implements IUniverseDriver {
+export class Universe extends EventEmitter implements IUniverse {
+	private _untypedOn = this.on;
+	private _untypedEmit = this.emit;
+	public on = <K extends keyof UniverseEmissions>(event: K, listener: UniverseEmissions[K]): this =>
+		this._untypedOn(event, listener);
+	public emit = <K extends keyof UniverseEmissions>(
+		event: K,
+		...args: Parameters<UniverseEmissions[K]>
+	): boolean => this._untypedEmit(event, ...args);
+
 	private readonly _universeBuffer: Buffer;
 
 	private _readyToWrite: boolean;
