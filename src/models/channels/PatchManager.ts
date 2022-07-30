@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import { DmxAddressRange, DefinedProfile } from "../../types";
 import { DmxRangeOverlapError, MapOverlapError } from "../../Errors/OverlapError";
 
-import {Channel} from "./Channel";
+import { Channel } from "./Channel";
 
 export class PatchManager extends EventEmitter {
 	private _map: Map<number, Channel>;
@@ -17,10 +17,12 @@ export class PatchManager extends EventEmitter {
 		if (id < 1 || id > 9999) return new RangeError(`id '${id}' out of valid range 1 -> 9999`);
 		if (this._map.has(id)) return new MapOverlapError(`Patch already has a channel at index ${id}`);
 
-        const final = dmxAddressStart + profile.channelModes[profile.options.channelMode].count - 1
+		const final = dmxAddressStart + profile.channelModes[profile.options.channelMode].count - 1;
 
 		const isOverlap = Array.from(this._map)
-			.map(([id, channel]) => this.checkDmxAddressOverlap(channel.dmxAddressRange, {initial: dmxAddressStart, final}))
+			.map(([id, channel]) =>
+				this.checkDmxAddressOverlap(channel.dmxAddressRange, { initial: dmxAddressStart, final })
+			)
 			.some((elt) => elt);
 		if (isOverlap)
 			throw new DmxRangeOverlapError(
@@ -50,9 +52,10 @@ export class PatchManager extends EventEmitter {
 
 	moveChannel(id1: number, id2: number): PatchManager {
 		if (!this._map.has(id1)) throw new Error(`Cannot move channel, source channel ${id1} does not exist`);
-		if (this._map.has(id2)) throw new MapOverlapError(`Cannot move channel, PatchManager Map entry '${id2}' already exists`);
+		if (this._map.has(id2))
+			throw new MapOverlapError(`Cannot move channel, PatchManager Map entry '${id2}' already exists`);
 		const ch = this._map.get(id1);
-		ch._setId(id2)
+		ch._setId(id2);
 		this._map.set(id2, ch);
 		this._map.delete(id1);
 		this.emit("patchMove", id1, id2);
@@ -65,8 +68,20 @@ export class PatchManager extends EventEmitter {
 		return this;
 	}
 
+	removeChannels(ids: Set<number>): PatchManager {
+		ids.forEach((id) => this._map.delete(id));
+		this.emit("patchDelete", ids);
+		return this;
+	}
+
 	getChannel(id: number): Channel | undefined {
 		return this._map.get(id);
+	}
+
+	getChannels(ids: Set<number>): Map<number, Channel> {
+		const temp = new Map();
+		this._map.forEach((v, k) => (ids.has(k) ? temp.set(k, v) : void 0));
+		return temp;
 	}
 
 	getAllChannels(): Map<number, Channel> {
