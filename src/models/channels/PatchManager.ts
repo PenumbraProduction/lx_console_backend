@@ -4,7 +4,22 @@ import { DmxRangeOverlapError, MapOverlapError } from "../../Errors/OverlapError
 
 import { Channel } from "./Channel";
 
+export interface PatchManagerEmissions {
+	patchAdd: (channel: Channel) => void;
+	patchMove: (id1:number, id2:number) => void;
+	patchDelete: (id: number | Set<number>) => void;
+}
+
 export class PatchManager extends EventEmitter {
+	private _untypedOn = this.on;
+	private _untypedEmit = this.emit;
+	public on = <K extends keyof PatchManagerEmissions>(event: K, listener: PatchManagerEmissions[K]): this =>
+		this._untypedOn(event, listener);
+	public emit = <K extends keyof PatchManagerEmissions>(
+		event: K,
+		...args: Parameters<PatchManagerEmissions[K]>
+	): boolean => this._untypedEmit(event, ...args);
+
 	private _map: Map<number, Channel>;
 
 	constructor() {
