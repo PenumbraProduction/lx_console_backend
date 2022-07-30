@@ -50,7 +50,7 @@ export class CueManager extends EventEmitter {
 		return this;
 	}
 
-	removeGroups(ids: Set<number>): CueManager {
+	removeCues(ids: Set<number>): CueManager {
 		ids.forEach((id) => this._map.delete(id));
 		this.emit("cueDelete", ids);
 		return this;
