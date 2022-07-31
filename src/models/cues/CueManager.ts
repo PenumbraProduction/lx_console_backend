@@ -59,4 +59,14 @@ export class CueManager extends EventEmitter {
 	getCue(id: number): Cue | undefined {
 		return this._map.get(id);
 	}
+
+	getCues(ids: Set<number>): Map<number, Cue> {
+		const temp = new Map();
+		this._map.forEach((v, k) => (ids.has(k) ? temp.set(k, v) : void 0));
+		return temp;
+	}
+
+	getAllCues(): Map<number, Cue> {
+		return this._map;
+	}
 }

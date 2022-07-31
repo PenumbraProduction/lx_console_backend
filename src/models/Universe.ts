@@ -1,13 +1,13 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { wait } from "../util/time";
-import {UniverseData} from "../types";
+import { UniverseData } from "../types";
 
 export interface UniverseEmissions {
 	serialportClose: () => void;
 	serialportEnd: () => void;
 	serialportError: (error: Error) => void;
-	bufferUpdate: () => void;
+	bufferUpdate: (data: UniverseData | undefined) => void;
 }
 
 export interface IUniverse extends EventEmitter {
@@ -28,10 +28,8 @@ export class Universe extends EventEmitter implements IUniverse {
 	private _untypedEmit = this.emit;
 	public on = <K extends keyof UniverseEmissions>(event: K, listener: UniverseEmissions[K]): this =>
 		this._untypedOn(event, listener);
-	public emit = <K extends keyof UniverseEmissions>(
-		event: K,
-		...args: Parameters<UniverseEmissions[K]>
-	): boolean => this._untypedEmit(event, ...args);
+	public emit = <K extends keyof UniverseEmissions>(event: K, ...args: Parameters<UniverseEmissions[K]>): boolean =>
+		this._untypedEmit(event, ...args);
 
 	private readonly _universeBuffer: Buffer;
 
@@ -55,6 +53,12 @@ export class Universe extends EventEmitter implements IUniverse {
 	getUniverseBuffer(): Buffer {
 		// ? is this inefficient? Could I not just send whatever value is in index 0 without any effect?
 		return Buffer.concat([Buffer.from([0]), this._universeBuffer.slice(1)]);
+	}
+
+	getUniverseData(): UniverseData {
+		const data: UniverseData = {};
+		this._universeBuffer.forEach((v, i) => (data[i] = v));
+		return data
 	}
 
 	init(serialPortName: string): Promise<void> {
@@ -129,27 +133,31 @@ export class Universe extends EventEmitter implements IUniverse {
 
 	update(channel: number, value: number): void {
 		this._universeBuffer[channel] = value;
-		this.emit("bufferUpdate"); // todo: only send specific data that has been updated, instead of relying on entire buffer being re-read
+		this.emit("bufferUpdate", { [channel]: value }); // todo: only send specific data that has been updated, instead of relying on entire buffer being re-read
 	}
 
 	updateSelect(channels: Array<number>, val: number): void {
+		const data: UniverseData = {};
 		for (const c of channels) {
+			data[c] = val;
 			this._universeBuffer[c] = val;
 		}
-		this.emit("bufferUpdate");
+		this.emit("bufferUpdate", data);
 	}
 
 	updateEach(channels: UniverseData): void {
 		for (const c in channels) {
 			this._universeBuffer[c] = channels[c];
 		}
-		this.emit("bufferUpdate");
+		this.emit("bufferUpdate", channels);
 	}
 
 	updateAll(value: number): void {
+		const data: UniverseData = {};
 		for (let i = 1; i <= 512; i++) {
+			data[i] = value;
 			this._universeBuffer[i] = value;
 		}
-		this.emit("bufferUpdate");
+		this.emit("bufferUpdate", undefined);
 	}
 }

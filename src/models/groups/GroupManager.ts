@@ -61,6 +61,12 @@ export class GroupManager extends EventEmitter {
 		return this._map.get(id);
 	}
 
+	getGroups(ids: Set<number>): Map<number, Group> {
+		const temp = new Map();
+		this._map.forEach((v, k) => (ids.has(k) ? temp.set(k, v) : void 0));
+		return temp;
+	}
+
 	getAllGroups(): Map<number, Group> {
 		return this._map;
 	}
