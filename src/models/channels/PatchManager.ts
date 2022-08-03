@@ -1,13 +1,14 @@
 import { EventEmitter } from "events";
-import { DmxAddressRange, DefinedProfile } from "../../types";
+import { DmxAddressRange, DefinedProfile, FixtureChannelType } from "../../types";
 import { DmxRangeOverlapError, MapOverlapError } from "../../Errors/OverlapError";
 
 import { Channel } from "./Channel";
 
 export interface PatchManagerEmissions {
 	patchAdd: (channel: Channel) => void;
-	patchMove: (id1:number, id2:number) => void;
+	patchMove: (id1: number, id2: number) => void;
 	patchDelete: (id: number | Set<number>) => void;
+	addressUpdate: (address: number, value: number) => void;
 }
 
 export class PatchManager extends EventEmitter {
@@ -21,11 +22,13 @@ export class PatchManager extends EventEmitter {
 	): boolean => this._untypedEmit(event, ...args);
 
 	private _map: Map<number, Channel>;
+	output: Array<number>;
 
 	constructor() {
 		super();
 
 		this._map = new Map<number, Channel>();
+		this.output = new Array(255);
 	}
 
 	private isValid(id: number, profile: DefinedProfile, dmxAddressStart: number): Error | null {
@@ -56,10 +59,18 @@ export class PatchManager extends EventEmitter {
 		);
 	}
 
+	private addressUpdateListener(channel: Channel, address: number, type: FixtureChannelType, val: number) {
+		const offset = channel.dmxAddressRange.initial + address - 1;
+		this.output[offset - 1] = val;
+		this.emit("addressUpdate", offset, val)
+	}
+
 	addChannel(id: number, profile: DefinedProfile, dmxAddressStart: number): PatchManager {
 		const isValid = this.isValid(id, profile, dmxAddressStart);
 		if (isValid === null) {
-			this._map.set(id, new Channel(id, profile, dmxAddressStart));
+			const channel = new Channel(id, profile, dmxAddressStart);
+			channel.on("addressUpdate", (...args) => this.addressUpdateListener(channel, ...args));
+			this._map.set(id, channel);
 		} else throw isValid;
 		this.emit("patchAdd", this._map.get(id));
 		return this;
@@ -93,9 +104,10 @@ export class PatchManager extends EventEmitter {
 		return this._map.get(id);
 	}
 
-	getChannels(ids: Set<number>): Map<number, Channel> {
+	getChannels(ids: Set<number> | Array<number>): Map<number, Channel> {
 		const temp = new Map();
-		this._map.forEach((v, k) => (ids.has(k) ? temp.set(k, v) : void 0));
+		ids.forEach((id) => (this._map.has(id) ? temp.set(id, this._map.get(id)) : undefined));
+		// this._map.forEach((v, k) => (ids.has(k) ? temp.set(k, v) : void 0));
 		return temp;
 	}
 

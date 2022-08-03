@@ -1,16 +1,3 @@
-export declare type USB_Device = {
-	path: string; // path: 'COM9',
-	manufacturer: string; // manufacturer: 'FTDI',
-	serialNumber: string; // serialNumber: 'AL05O8JJ',
-	pnpId: string; // pnpId: 'FTDIBUS\\VID_0403+PID_6001+AL05O8JJA\\0000',
-	locationId: string; // locationId: undefined,
-	friendlyName?: string; // friendlyName: 'USB Serial Port (COM9)',
-	vendorId: string; // vendorId: '0403',
-	productId: string; // productId: '6001'
-};
-
-//
-
 export declare type UniverseData = {
 	[key: number]: number;
 };
@@ -33,8 +20,7 @@ export declare type ProfileOptions = {
 	channelMode: number;
 };
 
-
-export declare type DefinedProfile = Profile & {options: ProfileOptions};
+export declare type DefinedProfile = Profile & { options: ProfileOptions };
 
 export declare type FixtureChannel = {
 	name: string;
@@ -45,13 +31,13 @@ export declare type FixtureChannel = {
 export declare type FixtureChannelType =
 	| "GENERIC"
 	| "INTENSITY"
-	| "COLOUR_WHEEL"
+	| "COLOUR-WHEEL"
 	| "COLOUR-RED"
 	| "COLOUR-GREEN"
 	| "COLOUR-BLUE"
 	| "COLOUR-CYAN"
 	| "COLOUR-YELLOW"
-	| "COLOUR-YELLOW"
+	| "COLOUR-MAGENTA"
 	| "GOBO-WHEEL"
 	| "SHUTTER"
 	| "POS-PAN"

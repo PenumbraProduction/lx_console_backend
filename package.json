@@ -27,15 +27,12 @@
   "homepage": "https://github.com/LordFarquhar/lx_console_backend#readme",
   "devDependencies": {
     "@types/node": "^17.0.37",
-    "ts-loader": "^9.3.0",
     "typescript": "^4.7.2",
-    "@types/serialport": "^8.0.2",
-    "webpack-cli": "^4.9.2"
+    "@types/serialport": "^8.0.2"
   },
   "dependencies": {
     "events": "^3.3.0",
     "openfixturelibrary": "^1.0.6",
-    "serialport": "^10.4.0",
-    "sf": "^0.2.0"
+    "serialport": "^10.4.0"
   }
 }
