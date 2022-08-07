@@ -2,20 +2,17 @@ import { EventEmitter } from "events";
 import { InvalidDMXError } from "../../Errors/InvalidDMXError";
 import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, UniverseData } from "../../types";
 
-export interface ChannelEmissions {   
+export interface ChannelEmissions {
 	addressUpdate: (address: number, type: FixtureChannelType, value: number) => void;
 }
 
 export class Channel extends EventEmitter {
-    private _untypedOn = this.on;
+	private _untypedOn = this.on;
 	private _untypedEmit = this.emit;
 	public on = <K extends keyof ChannelEmissions>(event: K, listener: ChannelEmissions[K]): this =>
 		this._untypedOn(event, listener);
-	public emit = <K extends keyof ChannelEmissions>(
-		event: K,
-		...args: Parameters<ChannelEmissions[K]>
-	): boolean => this._untypedEmit(event, ...args);
-
+	public emit = <K extends keyof ChannelEmissions>(event: K, ...args: Parameters<ChannelEmissions[K]>): boolean =>
+		this._untypedEmit(event, ...args);
 
 	id: number;
 	name: string;
@@ -26,7 +23,7 @@ export class Channel extends EventEmitter {
 
 	constructor(id: number, profile: DefinedProfile, dmxAddressStart: number) {
 		super();
-        
+
 		this.id = id;
 		this.name = profile.name;
 		this.profile = profile;
@@ -34,9 +31,11 @@ export class Channel extends EventEmitter {
 			initial: dmxAddressStart,
 			final: dmxAddressStart + profile.channelModes[profile.options.channelMode].count - 1
 		};
-		this.channelMap = profile.channelModes[profile.options.channelMode].channels.map(
-			(chNo) => this.profile.channels[chNo]
-		);
+		this.channelMap = profile.channelModes[profile.options.channelMode].channels.map((chNo) => {
+			const ch = this.profile.channels[chNo];
+			ch.addressOffset = chNo;
+			return ch;
+		});
 		this.output = new Array(this.channelMap.length).fill(-1);
 	}
 
@@ -46,10 +45,18 @@ export class Channel extends EventEmitter {
 	}
 
 	setAddress(index: number, value: number) {
-        if(!this.channelMap[index]) throw new InvalidDMXError(`Address Offset ${index} does not exist in channelMap in this mode`);
+		if (!this.channelMap[index])
+			throw new InvalidDMXError(`Address Offset ${index} does not exist in channelMap in this mode`);
 		this.output[index] = value;
-        this.emit(`addressUpdate`, index, this.channelMap[index].type, value);
+		this.emit(`addressUpdate`, index, this.channelMap[index].type, value);
 	}
+
+    getChannelsMatchType(type: FixtureChannelType) {
+		return this.channelMap.filter((ch) => ch.type == type);
+	}
+
+	// ! access the correct channel of type by keeping the same index
+	// No need to "understand" what each channel does, simply remember the type and index offset
 
 	getAddressFromType(type: FixtureChannelType) {
 		return this.channelMap.findIndex((ch) => ch.type == type);

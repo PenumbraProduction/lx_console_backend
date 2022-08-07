@@ -62,7 +62,7 @@ export class PatchManager extends EventEmitter {
 	private addressUpdateListener(channel: Channel, address: number, type: FixtureChannelType, val: number) {
 		const offset = channel.dmxAddressRange.initial + address - 1;
 		this.output[offset - 1] = val;
-		this.emit("addressUpdate", offset, val)
+		this.emit("addressUpdate", offset, val);
 	}
 
 	addChannel(id: number, profile: DefinedProfile, dmxAddressStart: number): PatchManager {
@@ -109,6 +109,20 @@ export class PatchManager extends EventEmitter {
 		ids.forEach((id) => (this._map.has(id) ? temp.set(id, this._map.get(id)) : undefined));
 		// this._map.forEach((v, k) => (ids.has(k) ? temp.set(k, v) : void 0));
 		return temp;
+	}
+
+	getAllChannelNumbers(): Array<number> {
+		return Array.from(this._map.keys());
+	}
+
+	getUsedAddressSpace(): Set<number> {
+		const used = new Set<number>();
+		this._map.forEach((ch) => {
+			for (let i = ch.dmxAddressRange.initial; i <= ch.dmxAddressRange.final; i++) {
+				used.add(i);
+			}
+		});
+		return used;
 	}
 
 	getAllChannels(): Map<number, Channel> {

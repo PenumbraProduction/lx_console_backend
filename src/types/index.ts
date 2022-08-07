@@ -26,6 +26,7 @@ export declare type FixtureChannel = {
 	name: string;
 	type: FixtureChannelType;
 	bounds?: FixtureChannelBounds[];
+	addressOffset?: number;
 };
 
 export declare type FixtureChannelType =
