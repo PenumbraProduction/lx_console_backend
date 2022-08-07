@@ -115,11 +115,11 @@ export class PatchManager extends EventEmitter {
 		return Array.from(this._map.keys());
 	}
 
-	getUsedAddressSpace(): Set<number> {
-		const used = new Set<number>();
+	getUsedAddressSpace(): Array<number> {
+		const used: Array<number> = [];
 		this._map.forEach((ch) => {
 			for (let i = ch.dmxAddressRange.initial; i <= ch.dmxAddressRange.final; i++) {
-				used.add(i);
+				used.push(i);
 			}
 		});
 		return used;
