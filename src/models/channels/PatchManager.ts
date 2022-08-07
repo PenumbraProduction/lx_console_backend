@@ -9,6 +9,7 @@ export interface PatchManagerEmissions {
 	patchMove: (id1: number, id2: number) => void;
 	patchDelete: (id: number | Set<number>) => void;
 	addressUpdate: (address: number, value: number) => void;
+	channelNameUpdate: (id: number, name: string) => void;
 }
 
 export class PatchManager extends EventEmitter {
@@ -59,17 +60,27 @@ export class PatchManager extends EventEmitter {
 		);
 	}
 
+	private setupChannelListeners(channel: Channel): Channel {
+		channel.on("addressUpdate", (...args) => this.addressUpdateListener(channel, ...args));
+		channel.on("nameUpdate", (...args) => this.nameUpdateListener(channel, ...args));
+		return channel;
+	}
+
 	private addressUpdateListener(channel: Channel, address: number, type: FixtureChannelType, val: number) {
 		const offset = channel.dmxAddressRange.initial + address - 1;
 		this.output[offset - 1] = val;
 		this.emit("addressUpdate", offset, val);
 	}
 
+	private nameUpdateListener(channel:Channel, name:string) {
+		this.emit("channelNameUpdate", channel.id, name);
+	}
+
 	addChannel(id: number, profile: DefinedProfile, dmxAddressStart: number): PatchManager {
 		const isValid = this.isValid(id, profile, dmxAddressStart);
 		if (isValid === null) {
 			const channel = new Channel(id, profile, dmxAddressStart);
-			channel.on("addressUpdate", (...args) => this.addressUpdateListener(channel, ...args));
+			this.setupChannelListeners(channel);
 			this._map.set(id, channel);
 		} else throw isValid;
 		this.emit("patchAdd", this._map.get(id));

@@ -4,6 +4,7 @@ import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, Un
 
 export interface ChannelEmissions {
 	addressUpdate: (address: number, type: FixtureChannelType, value: number) => void;
+	nameUpdate: (name: string) => void;
 }
 
 export class Channel extends EventEmitter {
@@ -41,6 +42,12 @@ export class Channel extends EventEmitter {
 
 	_setId(id: number): Channel {
 		this.id = id;
+		return this;
+	}
+
+	setName(name: string): Channel {
+		this.name = name;
+		this.emit("nameUpdate", name);
 		return this;
 	}
 
