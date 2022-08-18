@@ -72,7 +72,7 @@ export class PatchManager extends EventEmitter {
 		this.emit("addressUpdate", offset, val);
 	}
 
-	private nameUpdateListener(channel:Channel, name:string) {
+	private nameUpdateListener(channel: Channel, name: string) {
 		this.emit("channelNameUpdate", channel.id, name);
 	}
 

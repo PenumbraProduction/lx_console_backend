@@ -51,11 +51,11 @@ export class Channel extends EventEmitter {
 		return this;
 	}
 
-	setAddress(index: number, value: number) {
-		if (!this.channelMap[index])
-			throw new InvalidDMXError(`Address Offset ${index} does not exist in channelMap in this mode`);
-		this.output[index] = value;
-		this.emit(`addressUpdate`, index, this.channelMap[index].type, value);
+	setAddress(addressOffset: number, value: number) {
+		if (!this.channelMap[addressOffset])
+			throw new InvalidDMXError(`Address Offset ${addressOffset} does not exist in channelMap in this mode`);
+		this.output[addressOffset] = value;
+		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, value);
 	}
 
     getChannelsMatchType(type: FixtureChannelType) {
