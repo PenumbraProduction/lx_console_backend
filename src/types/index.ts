@@ -29,23 +29,27 @@ export declare type FixtureChannel = {
 	addressOffset?: number;
 };
 
-export declare type FixtureChannelType =
-	| "GENERIC"
-	| "INTENSITY"
-	| "COLOUR-WHEEL"
-	| "COLOUR-RED"
-	| "COLOUR-GREEN"
-	| "COLOUR-BLUE"
-	| "COLOUR-CYAN"
-	| "COLOUR-YELLOW"
-	| "COLOUR-MAGENTA"
-	| "GOBO-WHEEL"
-	| "SHUTTER"
-	| "POS-PAN"
-	| "POS-PAN-FINE"
-	| "POS-TILT"
-	| "POS-TILT-FINE"
-	| "FUNCTION";
+export const FixtureChannelTypes = [
+	"GENERIC",
+	"INTENSITY",
+	"COLOUR-WHEEL",
+	"COLOUR-RED",
+	"COLOUR-GREEN",
+	"COLOUR-BLUE",
+	"COLOUR-CYAN",
+	"COLOUR-YELLOW",
+	"COLOUR-MAGENTA",
+	"GOBO-WHEEL",
+	"SHUTTER",
+	"POS-PAN",
+	"POS-PAN-FINE",
+	"POS-TILT",
+	"POS-TILT-FINE",
+	"FUNCTION",
+	"UNKNOWN"
+] as const;
+
+export declare type FixtureChannelType = typeof FixtureChannelTypes[number]
 
 export declare type FixtureChannelBounds = {
 	name: string;

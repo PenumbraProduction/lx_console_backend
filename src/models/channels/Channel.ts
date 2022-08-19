@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { InvalidDMXError } from "../../Errors/InvalidDMXError";
-import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, UniverseData } from "../../types";
+import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, FixtureChannelTypes, UniverseData } from "../../types";
 
 export interface ChannelEmissions {
 	addressUpdate: (address: number, type: FixtureChannelType, value: number) => void;
@@ -32,6 +32,10 @@ export class Channel extends EventEmitter {
 			initial: dmxAddressStart,
 			final: dmxAddressStart + profile.channelModes[profile.options.channelMode].count - 1
 		};
+		this.profile.channels.map(ch => {
+			if(!FixtureChannelTypes.includes(ch.type)) ch.type = "UNKNOWN";
+			return ch;
+		});
 		this.channelMap = profile.channelModes[profile.options.channelMode].channels.map((chNo) => {
 			const ch = this.profile.channels[chNo];
 			ch.addressOffset = chNo;
