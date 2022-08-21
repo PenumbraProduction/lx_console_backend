@@ -2,6 +2,6 @@ export * from "./Desk";
 export * from "./Transition";
 export * from "./channels";
 export * from "./cues";
-export * from "./groups";
+export * from "./palettes";
 export * from "./playbacks";
 export * from "./Programmer";

@@ -49,7 +49,7 @@ export const FixtureChannelTypes = [
 	"UNKNOWN"
 ] as const;
 
-export declare type FixtureChannelType = typeof FixtureChannelTypes[number]
+export declare type FixtureChannelType = typeof FixtureChannelTypes[number];
 
 export declare type FixtureChannelBounds = {
 	name: string;
@@ -68,6 +68,8 @@ export declare type DmxAddressRange = {
 };
 
 //
+
+export declare type ChannelAddress = { channel: number; address: number };
 
 export declare type GroupOptions = {
 	id: number;
