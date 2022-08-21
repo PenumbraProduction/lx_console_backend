@@ -77,4 +77,8 @@ export class Palette<itemType extends PaletteItem> extends EventEmitter {
 	getAllItems(): Map<number, itemType> {
 		return this._map;
 	}
+
+	getPaletteData(): PaletteData {
+		return {defaultName: this.defaultName}
+	}
 }
