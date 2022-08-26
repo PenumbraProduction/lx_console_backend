@@ -39,6 +39,9 @@ export const FixtureChannelTypes = [
 	"COLOUR-CYAN",
 	"COLOUR-YELLOW",
 	"COLOUR-MAGENTA",
+	"COLOUR-AMBER",
+	"COLOUR-WHITE",
+	"COLOUR-UV",
 	"GOBO-WHEEL",
 	"SHUTTER",
 	"POS-PAN",
@@ -70,12 +73,6 @@ export declare type DmxAddressRange = {
 //
 
 export declare type ChannelAddress = { channel: number; address: number };
-
-export declare type GroupOptions = {
-	id: number;
-	name?: string;
-	channels?: Set<number>;
-};
 
 export declare type CueOptions = {
 	id: number;

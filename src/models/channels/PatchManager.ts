@@ -67,7 +67,7 @@ export class PatchManager extends EventEmitter {
 	}
 
 	private addressUpdateListener(channel: Channel, address: number, type: FixtureChannelType, val: number) {
-		const offset = channel.dmxAddressRange.initial + address - 1;
+		const offset = channel.dmxAddressRange.initial + address;
 		this.output[offset - 1] = val;
 		this.emit("addressUpdate", offset, val, channel, type);
 	}
