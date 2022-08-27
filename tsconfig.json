@@ -7,6 +7,8 @@
 		"declaration": true,
 		"outDir": "out",
 		"sourceMap": true,
+
+		"esModuleInterop": true,
 		"noImplicitAny": true,
 		"experimentalDecorators": true,
 		"preserveConstEnums": true,
