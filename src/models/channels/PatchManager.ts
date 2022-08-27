@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { DmxAddressRange, DefinedProfile, FixtureChannelType } from "../../types";
+import { DmxAddressRange, DefinedProfile, FixtureChannelType, ProfileOptions } from "../../types";
 import { DmxRangeOverlapError, MapOverlapError } from "../../Errors/OverlapError";
 
 import { Channel } from "./Channel";
@@ -120,6 +120,14 @@ export class PatchManager extends EventEmitter {
 		ids.forEach((id) => (this._map.has(id) ? temp.set(id, this._map.get(id)) : undefined));
 		// this._map.forEach((v, k) => (ids.has(k) ? temp.set(k, v) : void 0));
 		return temp;
+	}
+
+	getChannelsByProfileType(profileId: string, profileOptions?: ProfileOptions): Map<number, Channel> {
+		return Array.from(this._map.values())
+			.filter((ch) =>
+				ch.profile.id == profileId && profileOptions ? ch.profile.options == profileOptions : true
+			)
+			.reduce((prev, ch) => prev.set(ch.id, ch), new Map<number, Channel>());
 	}
 
 	getAllChannelNumbers(): Array<number> {
