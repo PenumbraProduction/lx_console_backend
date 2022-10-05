@@ -63,6 +63,13 @@ export class Channel extends EventEmitter {
 		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, val, isProgrammer);
 	}
 
+	clearProgrammerValues() {
+		this.output.forEach((v, i) => {
+			v.programmerVal = undefined;
+			this.emit("addressUpdate", i, this.channelMap[i].type, v.val, false);
+		});
+	}
+
 	getChannelsMatchType(type: FixtureChannelType) {
 		return this.channelMap.filter((ch) => ch.type == type);
 	}

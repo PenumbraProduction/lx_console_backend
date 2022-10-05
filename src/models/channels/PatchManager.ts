@@ -91,6 +91,12 @@ export class PatchManager extends EventEmitter {
 		this.emit("channelNameUpdate", channel.id, name);
 	}
 
+	clearProgrammerValues() {
+		this._map.forEach((ch) => {
+			ch.clearProgrammerValues()
+		});
+	}
+
 	addChannel(id: number, profile: DefinedProfile, dmxAddressStart: number): PatchManager {
 		const isValid = this.isValid(id, profile, dmxAddressStart);
 		if (isValid === null) {
