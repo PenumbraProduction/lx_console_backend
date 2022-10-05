@@ -35,7 +35,7 @@ export class PatchManager extends EventEmitter {
 		super();
 
 		this._map = new Map<number, Channel>();
-		this.output = new Array(255);
+		this.output = new Array(512).fill({ val: 0, isProgrammer: false });
 	}
 
 	private isValid(id: number, profile: DefinedProfile, dmxAddressStart: number): Error | null {
