@@ -3,7 +3,7 @@ import { InvalidDMXError } from "../../Errors/InvalidDMXError";
 import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, FixtureChannelTypes } from "../../types";
 
 export interface ChannelEmissions {
-	addressUpdate: (address: number, type: FixtureChannelType, value: number, isProgrammer: boolean) => void;
+	addressUpdate: (address: number, type: FixtureChannelType, value: { val: number; programmerVal: number }) => void;
 	nameUpdate: (name: string) => void;
 }
 
@@ -60,13 +60,13 @@ export class Channel extends EventEmitter {
 			throw new InvalidDMXError(`Address Offset ${addressOffset} does not exist in channelMap in this mode`);
 		if (isProgrammer) this.output[addressOffset].programmerVal = val;
 		else this.output[addressOffset].val = val;
-		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, val, isProgrammer);
+		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, this.output[addressOffset]);
 	}
 
 	clearProgrammerValues() {
 		this.output.forEach((v, i) => {
 			v.programmerVal = -1;
-			this.emit("addressUpdate", i, this.channelMap[i].type, v.val, false);
+			this.emit("addressUpdate", i, this.channelMap[i].type, v);
 		});
 	}
 

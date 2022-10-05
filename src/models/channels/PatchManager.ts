@@ -29,13 +29,11 @@ export class PatchManager extends EventEmitter {
 	): boolean => this._untypedEmit(event, ...args);
 
 	private _map: Map<number, Channel>;
-	output: Array<{ val: number; programmerVal: number }>;
 
 	constructor() {
 		super();
 
 		this._map = new Map<number, Channel>();
-		this.output = new Array(512).fill({ val: 0, programmerVal: -1 });
 	}
 
 	private isValid(id: number, profile: DefinedProfile, dmxAddressStart: number): Error | null {
@@ -76,15 +74,10 @@ export class PatchManager extends EventEmitter {
 		channel: Channel,
 		address: number,
 		type: FixtureChannelType,
-		val: number,
-		isProgrammer: boolean
+		val: { val: number; programmerVal: number },
 	) {
 		const offset = channel.dmxAddressRange.initial + address;
-
-		if (isProgrammer) this.output[offset - 1].programmerVal = val;
-		else this.output[offset - 1].val = val;
-
-		this.emit("addressUpdate", offset, this.output[offset - 1], channel, type);
+		this.emit("addressUpdate", offset, val, channel, type);
 	}
 
 	private nameUpdateListener(channel: Channel, name: string) {
