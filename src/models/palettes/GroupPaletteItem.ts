@@ -23,4 +23,10 @@ export class GroupPaletteItem extends PaletteItem {
 		channels.forEach((ch: number) => this.channels.delete(ch));
 		return this;
 	}
+
+	static serialize(group: GroupPaletteItem): GroupData {
+		return { id: group.id, channels: group.channels, name: group.name };
+	}
 }
+
+export type GroupData = { id: number, channels: Set<number>, name: string };

@@ -58,7 +58,7 @@ export class Channel extends EventEmitter {
 	setAddress(addressOffset: number, val: number, isProgrammer: boolean) {
 		if (!this.channelMap[addressOffset])
 			throw new InvalidDMXError(`Address Offset ${addressOffset} does not exist in channelMap in this mode`);
-		if(isProgrammer) this.output[addressOffset].programmerVal = val
+		if (isProgrammer) this.output[addressOffset].programmerVal = val;
 		else this.output[addressOffset].val = val;
 		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, val, isProgrammer);
 	}
@@ -74,4 +74,9 @@ export class Channel extends EventEmitter {
 	get masterAddress() {
 		return this.channelMap.findIndex((ch) => ch.type == "INTENSITY");
 	}
+
+	static serialize(ch: Channel): ChannelData {
+		return { channel: ch.id, dmxAddressRange: ch.dmxAddressRange, name: ch.name, profile: ch.profile };
+	}
 }
+export type ChannelData = { channel: number; dmxAddressRange: DmxAddressRange; name: string; profile: DefinedProfile };
