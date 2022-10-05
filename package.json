@@ -1,6 +1,6 @@
 {
   "name": "lx_console_backend",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "",
   "main": "out/index.js",
   "types": "out/index.d.ts",
