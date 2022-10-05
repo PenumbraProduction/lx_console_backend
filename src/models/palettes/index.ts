@@ -6,3 +6,4 @@ export * from "./ColourPaletteItem";
 export * from "./BeamPaletteItem";
 export * from "./ShapePaletteItem";
 export * from "./PositionPaletteItem";
+export * from "./CuePaletteItem";

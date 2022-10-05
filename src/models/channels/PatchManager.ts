@@ -9,7 +9,12 @@ export interface PatchManagerEmissions {
 	patchAdd: (channel: Channel) => void;
 	patchMove: (id1: number, id2: number) => void;
 	patchDelete: (id: number | Set<number>) => void;
-	addressUpdate: (address: number, value: number, channel: Channel, type: FixtureChannelType) => void;
+	addressUpdate: (
+		address: number,
+		value: { val: number; programmerVal: number },
+		channel: Channel,
+		type: FixtureChannelType
+	) => void;
 	channelNameUpdate: (id: number, name: string) => void;
 }
 
@@ -24,7 +29,7 @@ export class PatchManager extends EventEmitter {
 	): boolean => this._untypedEmit(event, ...args);
 
 	private _map: Map<number, Channel>;
-	output: Array<number>;
+	output: Array<{ val: number; programmerVal: number }>;
 
 	constructor() {
 		super();
@@ -52,7 +57,7 @@ export class PatchManager extends EventEmitter {
 		return null;
 	}
 
-	private checkDmxAddressOverlap(r1: DmxAddressRange, r2: DmxAddressRange) {
+	private checkDmxAddressOverlap(r1: DmxAddressRange, r2: DmxAddressRange): boolean {
 		return (
 			(r1.initial >= r2.initial && r1.initial <= r2.final) ||
 			(r1.final >= r2.initial && r1.final <= r2.final) ||
@@ -67,10 +72,19 @@ export class PatchManager extends EventEmitter {
 		return channel;
 	}
 
-	private addressUpdateListener(channel: Channel, address: number, type: FixtureChannelType, val: number) {
+	private addressUpdateListener(
+		channel: Channel,
+		address: number,
+		type: FixtureChannelType,
+		val: number,
+		isProgrammer: boolean
+	) {
 		const offset = channel.dmxAddressRange.initial + address;
-		this.output[offset - 1] = val;
-		this.emit("addressUpdate", offset, val, channel, type);
+
+		if (isProgrammer) this.output[offset - 1].programmerVal = val;
+		else this.output[offset - 1].val = val;
+
+		this.emit("addressUpdate", offset, this.output[offset - 1], channel, type);
 	}
 
 	private nameUpdateListener(channel: Channel, name: string) {

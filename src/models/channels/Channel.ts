@@ -1,9 +1,9 @@
 import { EventEmitter } from "events";
 import { InvalidDMXError } from "../../Errors/InvalidDMXError";
-import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, FixtureChannelTypes, UniverseData } from "../../types";
+import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, FixtureChannelTypes } from "../../types";
 
 export interface ChannelEmissions {
-	addressUpdate: (address: number, type: FixtureChannelType, value: number) => void;
+	addressUpdate: (address: number, type: FixtureChannelType, value: number, isProgrammer: boolean) => void;
 	nameUpdate: (name: string) => void;
 }
 
@@ -20,7 +20,7 @@ export class Channel extends EventEmitter {
 	profile: DefinedProfile;
 	dmxAddressRange: DmxAddressRange;
 	channelMap: FixtureChannel[]; // a list of the profiles channels with the channelMode applied
-	output: UniverseData;
+	output: Array<{ val: number; programmerVal: number }>;
 
 	constructor(id: number, profile: DefinedProfile, dmxAddressStart: number) {
 		super();
@@ -32,8 +32,8 @@ export class Channel extends EventEmitter {
 			initial: dmxAddressStart,
 			final: dmxAddressStart + profile.channelModes[profile.options.channelMode].count - 1
 		};
-		this.profile.channels.map(ch => {
-			if(!FixtureChannelTypes.includes(ch.type)) ch.type = "UNKNOWN";
+		this.profile.channels.map((ch) => {
+			if (!FixtureChannelTypes.includes(ch.type)) ch.type = "UNKNOWN";
 			return ch;
 		});
 		this.channelMap = profile.channelModes[profile.options.channelMode].channels.map((chNo) => {
@@ -41,7 +41,7 @@ export class Channel extends EventEmitter {
 			ch.addressOffset = chNo;
 			return ch;
 		});
-		this.output = new Array(this.channelMap.length).fill(-1);
+		this.output = new Array(this.channelMap.length).fill({ val: 0, isProgrammer: false });
 	}
 
 	_setId(id: number): Channel {
@@ -55,19 +55,17 @@ export class Channel extends EventEmitter {
 		return this;
 	}
 
-	setAddress(addressOffset: number, value: number) {
+	setAddress(addressOffset: number, val: number, isProgrammer: boolean) {
 		if (!this.channelMap[addressOffset])
 			throw new InvalidDMXError(`Address Offset ${addressOffset} does not exist in channelMap in this mode`);
-		this.output[addressOffset] = value;
-		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, value);
+		if(isProgrammer) this.output[addressOffset].programmerVal = val
+		else this.output[addressOffset].val = val;
+		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, val, isProgrammer);
 	}
 
-    getChannelsMatchType(type: FixtureChannelType) {
+	getChannelsMatchType(type: FixtureChannelType) {
 		return this.channelMap.filter((ch) => ch.type == type);
 	}
-
-	// ! access the correct channel of type by keeping the same index
-	// No need to "understand" what each channel does, simply remember the type and index offset
 
 	getAddressFromType(type: FixtureChannelType) {
 		return this.channelMap.findIndex((ch) => ch.type == type);

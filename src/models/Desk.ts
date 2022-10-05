@@ -1,14 +1,13 @@
 import { PatchManager } from "./channels/PatchManager";
-import { CueManager } from "./cues/CueManager";
 import { PlaybackManager } from "./playbacks/PlaybackManager";
 import { Programmer } from "./Programmer";
-import { BeamPaletteItem, ColourPaletteItem, GroupPaletteItem, Palette, PositionPaletteItem, ShapePaletteItem } from "./palettes";
+import { BeamPaletteItem, ColourPaletteItem, CuePaletteItem, GroupPaletteItem, Palette, PositionPaletteItem, ShapePaletteItem } from "./palettes";
 
 export class Desk {
 	programmer: Programmer;
 	patch: PatchManager;
 	groups: Palette<GroupPaletteItem>;
-	cues: CueManager;
+	cues: Palette<CuePaletteItem>;
 	playbacks: PlaybackManager;
 	colour: Palette<ColourPaletteItem>;
 	beam: Palette<BeamPaletteItem>;
@@ -18,13 +17,15 @@ export class Desk {
 	constructor() {
 		this.programmer = new Programmer();
 		this.patch = new PatchManager();
-		this.cues = new CueManager();
-		this.playbacks = new PlaybackManager();
-
+		
 		this.colour = new Palette<ColourPaletteItem>("Colour #");
 		this.beam = new Palette<BeamPaletteItem>("Beam #");
 		this.shape = new Palette<ShapePaletteItem>("Shape #");
 		this.position = new Palette<PositionPaletteItem>("Position #");
+
 		this.groups = new Palette<GroupPaletteItem>("Group #");
+		this.cues = new Palette<CuePaletteItem>("Cue #");
+
+		this.playbacks = new PlaybackManager();
 	}
 }
