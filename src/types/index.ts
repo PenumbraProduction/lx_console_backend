@@ -75,6 +75,7 @@ export declare type FixtureChannelRange = {
 };
 
 export declare type FixtureChannelMode = {
+	name?: string;
 	count: number;
 	channels: number[];
 };
@@ -87,9 +88,3 @@ export declare type DmxAddressRange = {
 //
 
 export declare type ChannelAddress = { channel: number; address: number };
-
-export declare type CueOptions = {
-	id: number;
-	name?: string;
-	channelData?: UniverseData;
-};
