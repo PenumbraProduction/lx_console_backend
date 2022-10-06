@@ -13,7 +13,8 @@ export interface PatchManagerEmissions {
 		address: number,
 		value: { val: number; programmerVal: number },
 		channel: Channel,
-		type: FixtureChannelType
+		type: FixtureChannelType,
+		userInitiated: boolean
 	) => void;
 	channelNameUpdate: (id: number, name: string) => void;
 }
