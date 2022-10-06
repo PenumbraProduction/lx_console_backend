@@ -1,5 +1,6 @@
 export * from "./Palette";
 export * from "./PaletteItem";
+export * from "./GenericPaletteItem";
 
 export * from "./GroupPaletteItem";
 export * from "./ColourPaletteItem";

@@ -1,13 +1,10 @@
-import { ChannelAddress } from "../..//types";
 import { PaletteData, PaletteItem } from ".";
 
 export class ColourPaletteItem extends PaletteItem {
-    colour: string;
-    colourWheelMap: Map<ChannelAddress, number>;
+	addressValues: Map<{ channel: number; address: number }, number>;
 
-    constructor(paletteData: PaletteData, id: number, colour: string, colourWheelMap: Map<ChannelAddress, number>) {
-        super(paletteData, id);
-        this.colour = colour;
-        this.colourWheelMap = colourWheelMap;
-    }
+	constructor(paletteData: PaletteData, id: number, addressValues: Map<{ channel: number; address: number }, number>) {
+		super(paletteData, id);
+		this.addressValues = addressValues;
+	}
 }
