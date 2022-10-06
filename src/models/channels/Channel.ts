@@ -3,7 +3,7 @@ import { InvalidDMXError } from "../../Errors/InvalidDMXError";
 import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, FixtureChannelTypes } from "../../types";
 
 export interface ChannelEmissions {
-	addressUpdate: (address: number, type: FixtureChannelType, value: { val: number; programmerVal: number }) => void;
+	addressUpdate: (address: number, type: FixtureChannelType, value: { val: number; programmerVal: number }, userInitiated: boolean) => void;
 	nameUpdate: (name: string) => void;
 }
 
@@ -55,18 +55,18 @@ export class Channel extends EventEmitter {
 		return this;
 	}
 
-	setAddress(addressOffset: number, val: number, isProgrammer: boolean) {
+	setAddress(addressOffset: number, val: number, userInitiated: boolean) {
 		if (!this.channelMap[addressOffset])
 			throw new InvalidDMXError(`Address Offset ${addressOffset} does not exist in channelMap in this mode`);
-		if (isProgrammer) this.output[addressOffset].programmerVal = val;
+		if (userInitiated) this.output[addressOffset].programmerVal = val;
 		else this.output[addressOffset].val = val;
-		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, this.output[addressOffset]);
+		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, this.output[addressOffset], userInitiated);
 	}
 
 	clearProgrammerValues() {
 		this.output.forEach((v, i) => {
 			v.programmerVal = -1;
-			this.emit("addressUpdate", i, this.channelMap[i].type, v);
+			this.emit("addressUpdate", i, this.channelMap[i].type, v, false);
 		});
 	}
 
