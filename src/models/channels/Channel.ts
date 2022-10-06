@@ -41,7 +41,7 @@ export class Channel extends EventEmitter {
 			ch.addressOffset = chNo;
 			return ch;
 		});
-		this.output = new Array(this.channelMap.length).fill({ val: 0, programmerVal: -1 });
+		this.output = new Array(this.channelMap.length).map((v) => (v = { val: 0, programmerVal: -1 }));
 	}
 
 	_setId(id: number): Channel {
