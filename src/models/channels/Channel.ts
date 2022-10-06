@@ -83,7 +83,24 @@ export class Channel extends EventEmitter {
 	}
 
 	static serialize(ch: Channel): ChannelData {
-		return { channel: ch.id, dmxAddressRange: ch.dmxAddressRange, name: ch.name, profile: ch.profile, channelMap: ch.channelMap };
+		return {
+			channel: ch.id,
+			dmxAddressRange: ch.dmxAddressRange,
+			name: ch.name,
+			profile: ch.profile,
+			channelMap: ch.channelMap,
+			output: ch.output
+		};
 	}
 }
-export type ChannelData = { channel: number; dmxAddressRange: DmxAddressRange; name: string; profile: DefinedProfile, channelMap: FixtureChannel[] };
+export type ChannelData = {
+	channel: number;
+	dmxAddressRange: DmxAddressRange;
+	name: string;
+	profile: DefinedProfile;
+	channelMap: FixtureChannel[];
+	output: {
+		val: number;
+		programmerVal: number;
+	}[];
+};
