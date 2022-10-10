@@ -37,6 +37,7 @@ export abstract class PaletteItem extends EventEmitter {
 
 	setName(name: string): PaletteItem {
 		this.name = name;
+		this.emit("itemUpdate", this)
 		return this;
 	}
 }
