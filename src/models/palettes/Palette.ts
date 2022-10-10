@@ -36,8 +36,13 @@ export class Palette<itemType extends PaletteItem> extends EventEmitter {
 	addItem(item: itemType): Palette<itemType> {
 		if (this._map.has(item.id)) throw new MapOverlapError(`Palette Map entry '${item.id}' already exists`);
 		this._map.set(item.id, item);
+		this.itemUpdateListener(item);
 		this.emit("itemAdd", item);
 		return this;
+	}
+
+	private itemUpdateListener(item: itemType) {
+		item.on("itemUpdate", (i) => this.emit("itemUpdate", i));
 	}
 
 	moveItem(id1: number, id2: number): Palette<itemType> {
