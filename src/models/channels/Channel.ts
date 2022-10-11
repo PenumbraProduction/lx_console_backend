@@ -70,6 +70,11 @@ export class Channel extends EventEmitter {
 		});
 	}
 
+	clearProgrammerValue(channel: number) {
+		this.output[channel].programmerVal = -1;
+		this.emit("addressUpdate", channel, this.channelMap[channel].type, this.output[channel], false);
+	}
+
 	getChannelsMatchType(type: FixtureChannelType) {
 		return this.channelMap.filter((ch) => ch.type == type);
 	}
