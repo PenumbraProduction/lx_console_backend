@@ -1,10 +1,10 @@
-import { ChannelAddress } from "../../types";
+import { ProfileTypeIdentifier } from "../../types";
 import { PaletteData, PaletteItem } from ".";
 
 export class GenericPaletteItem extends PaletteItem {
-	addressValues: Map<ChannelAddress, number>;
+	addressValues: Map<ProfileTypeIdentifier, number>;
 
-	constructor(paletteData: PaletteData, id: number, addressValues: Map<ChannelAddress, number>) {
+	constructor(paletteData: PaletteData, id: number, addressValues: Map<ProfileTypeIdentifier, number>) {
 		super(paletteData, id);
 		this.addressValues = addressValues;
 	}
@@ -15,4 +15,4 @@ export class GenericPaletteItem extends PaletteItem {
 	}
 }
 
-export type GenericPaletteItemData = { id: number, name: string, addressValues: Map<ChannelAddress, number> };
+export type GenericPaletteItemData = { id: number, name: string, addressValues: Map<ProfileTypeIdentifier, number> };

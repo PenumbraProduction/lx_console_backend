@@ -21,6 +21,7 @@ export declare type ProfileOptions = {
 };
 
 export declare type DefinedProfile = Profile & { options: ProfileOptions };
+export declare type ProfileTypeIdentifier = {id: string, options: ProfileOptions};
 
 export declare type FixtureChannel = {
 	name: string;
