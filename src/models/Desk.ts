@@ -7,7 +7,7 @@ export class Desk {
 	
 	groups: Palette<GroupPaletteItem>;
 	
-	cues: Palette<GenericPaletteItem>;
+	cues: Palette<CuePaletteItem>;
 	playbacks: PlaybackManager;
 
 	colour: Palette<GenericPaletteItem>;
@@ -28,7 +28,7 @@ export class Desk {
 		this.uncategorised = new Palette<GenericPaletteItem>("Uncategorised #");
 
 		this.groups = new Palette<GroupPaletteItem>("Group #");
-		this.cues = new Palette<GenericPaletteItem>("Cue #");
+		this.cues = new Palette<CuePaletteItem>("Cue #");
 
 		this.playbacks = new PlaybackManager();
 	}

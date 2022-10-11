@@ -1,16 +1,18 @@
+import { CuePaletteItem } from "../palettes";
 import { Transition } from "../Transition";
 
 export class StackCue {
 	referenceCueId: number;
 	id: string;
 	name: string;
-	transition: Transition;
+	// cueTransitions: Map<string, {cue: CuePaletteItem, transition: Transition}>;
 
-	constructor(id: string, name: string, referenceCueId: number, transition: Transition) {
+
+	constructor(id: string, name: string, referenceCueId: number, cueTransitions: Map<string, {cue: CuePaletteItem, transition: Transition}>) {
 		this.referenceCueId = referenceCueId;
 		this.id = id;
 		this.name = name;
-		this.transition = transition;
+		// this.cueTransitions = cueTransitions;
 	}
 }
 
