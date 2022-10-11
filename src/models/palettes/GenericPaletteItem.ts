@@ -2,9 +2,9 @@ import { ProfileTypeIdentifier } from "../../types";
 import { PaletteData, PaletteItem } from ".";
 
 export class GenericPaletteItem extends PaletteItem {
-	addressValues: Map<ProfileTypeIdentifier, number>;
+	addressValues: Map<ProfileTypeIdentifier, {addressOffset: number, value: number}>;
 
-	constructor(paletteData: PaletteData, id: number, addressValues: Map<ProfileTypeIdentifier, number>) {
+	constructor(paletteData: PaletteData, id: number, addressValues: Map<ProfileTypeIdentifier, {addressOffset: number, value: number}>) {
 		super(paletteData, id);
 		this.addressValues = addressValues;
 	}
@@ -15,4 +15,4 @@ export class GenericPaletteItem extends PaletteItem {
 	}
 }
 
-export type GenericPaletteItemData = { id: number, name: string, addressValues: Map<ProfileTypeIdentifier, number> };
+export type GenericPaletteItemData = { id: number, name: string, addressValues: Map<ProfileTypeIdentifier, {addressOffset: number, value: number}> };
