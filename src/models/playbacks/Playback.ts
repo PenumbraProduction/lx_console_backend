@@ -53,7 +53,7 @@ export class Playback extends EventEmitter {
 			const timings = categoryTimings.get(ch.channelMap[address].type);
 			const t = new Transition(ch.output[address].val, val, timings.duration, timings.delay);
 			t.on(TimingEvents.UPDATE, (_t, tVal) => {
-				console.log(`Setting ${channel} ${address}: ${tVal}`)
+				if(typeof tVal !== "number") return;
 				ch.setAddress(address, tVal, false);
 			}).on(TimingEvents.JUMPING, (_t, jumpStats) =>
 				console.log(`t: Jumping: ${jumpStats.jumpFrames} frames, ${jumpStats.jumpValue} raw value, ${jumpStats.jumpTime}ms`)
@@ -64,8 +64,8 @@ export class Playback extends EventEmitter {
 		this.transition = new TransitionGroup(transitions, 0);
 
 		this.transition.on(TimingEvents.END, () => {
-			this.transition = null;
 			this.isRunning = false;
+			this.transition = null;
 		});
 
 		this.transition.trigger();
