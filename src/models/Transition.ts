@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 
-enum TimingStates {
+export enum TimingStates {
 	UNTRIGGERED,
 	UNSTARTED,
 	RUNNING,
@@ -10,7 +10,7 @@ enum TimingStates {
 	RECALCULATING // when any "delta" values have been changed while running
 }
 
-enum TimingEvents {
+export enum TimingEvents {
 	TRIGGER = "trigger",
 	START = "start",
 	UPDATE = "update",
@@ -284,7 +284,9 @@ export class TransitionGroup extends EventEmitter {
 		// ?: is this needed here? I dont; think so, I think this becomes obsolete as a different transition will take control (and end this one) if the final value needs to change
 	}
 
-	// stop changing values with the intention of continuing to change later
+	/**
+	 * stop changing values with the intention of continuing to change later
+	 */
 	pause() {
 		if (this.state !== TimingStates.RUNNING) return;
 		this.state = TimingStates.PAUSED;
@@ -295,7 +297,9 @@ export class TransitionGroup extends EventEmitter {
 		this.emit(TimingEvents.PAUSED, this);
 	}
 
-	// resume changing values after pause
+	/**
+	 * resume changing values after pause
+	 */
 	resume() {
 		if (this.state !== TimingStates.PAUSED) return;
 		const length = this.transitions.length;
@@ -305,7 +309,9 @@ export class TransitionGroup extends EventEmitter {
 		this.emit(TimingEvents.RESUMED, this);
 	}
 
-	// stop changing values but Don't emit "end" event
+	/**
+	 * stop changing values but Don't emit "end" event
+	 */
 	cancel() {
 		this.state = TimingStates.CANCELLED;
 		const length = this.transitions.length;
@@ -315,7 +321,9 @@ export class TransitionGroup extends EventEmitter {
 		this.emit(TimingEvents.CANCELLED, this);
 	}
 
-	// set changing value to end and emit "end" event
+	/**
+	 * set changing value to end and emit "end" event
+	 */
 	endNow() {
 		this.state = TimingStates.ENDED;
 		const length = this.transitions.length;

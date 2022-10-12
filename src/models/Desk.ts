@@ -35,3 +35,5 @@ export class Desk {
 		this.playbacks = new Playback();
 	}
 }
+
+export const desk = new Desk();
