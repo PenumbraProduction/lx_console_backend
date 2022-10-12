@@ -1,27 +1,23 @@
 import { MapOverlapError } from "../../Errors/OverlapError";
-import { CueGroup } from "../cues/CueGroup";
-import { StackCue } from "../cues/StackCue";
+import { CueGroup } from "./CueGroup";
+import { StackCue } from "./StackCue";
 
 export const DEFAULT_PLAYBACK_NAME = "Playback #";
 
 export class Playback {
-	id: number;
-	name: string;
-	length: number;
+	// id: number;
+	// name: string;
 	cues: Map<string, CueGroup | StackCue>;
 
-	constructor(id: number, name: string) {
-		this.id = id;
-		this.name = name;
+	constructor() {
+		// this.id = id;
+		// this.name = name;
 
 		this.cues = new Map();
 	}
 
-	_setId(id: number): Playback {
-		if (this.name == DEFAULT_PLAYBACK_NAME.replace("#", this.id.toString()))
-			this.name = DEFAULT_PLAYBACK_NAME.replace("#", id.toString());
-		this.id = id;
-		return this;
+	get length(): number {
+		return this.cues.size;
 	}
 
 	addCue(cue: CueGroup | StackCue): Playback {
@@ -29,7 +25,7 @@ export class Playback {
 		this.cues.set(cue.id, cue);
 		return this;
 	}
-
+	
 	removeCue(id: string): Playback {
 		this.cues.delete(id);
 		return this;

@@ -1,6 +1,7 @@
 import { PatchManager } from "./channels/PatchManager";
 import { PlaybackManager } from "./playbacks/PlaybackManager";
 import { CuePaletteItem, GenericPaletteItem, GroupPaletteItem, Palette } from "./palettes";
+import { Playback } from "./playbacks";
 
 export class Desk {
 	patch: PatchManager;
@@ -8,7 +9,8 @@ export class Desk {
 	groups: Palette<GroupPaletteItem>;
 	
 	cues: Palette<CuePaletteItem>;
-	playbacks: PlaybackManager;
+	// playbacks: PlaybackManager;
+	playbacks: Playback;
 
 	colour: Palette<GenericPaletteItem>;
 	beam: Palette<GenericPaletteItem>;
@@ -30,6 +32,6 @@ export class Desk {
 		this.groups = new Palette<GroupPaletteItem>("Group #");
 		this.cues = new Palette<CuePaletteItem>("Cue #");
 
-		this.playbacks = new PlaybackManager();
+		this.playbacks = new Playback();
 	}
 }
