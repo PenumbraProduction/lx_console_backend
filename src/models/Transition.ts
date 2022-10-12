@@ -201,7 +201,7 @@ export class Transition extends EventEmitter {
 		if (this.state == TimingStates.RUNNING) clearTimeout(this.runningTimeoutID);
 		this.value = this.final;
 		this.state = TimingStates.ENDED;
-		this.emit(TimingEvents.UPDATE, this);
+		this.emit(TimingEvents.UPDATE, this, this.value);
 		this.emit(TimingEvents.END, this);
 	}
 }
