@@ -53,6 +53,7 @@ export class Playback extends EventEmitter {
 			const timings = categoryTimings.get(ch.channelMap[address].type);
 			const t = new Transition(ch.output[address].val, val, timings.duration, timings.delay);
 			t.on(TimingEvents.UPDATE, (_t, tVal) => {
+				console.log(`Setting ${channel} ${address}: ${tVal}`)
 				ch.setAddress(address, tVal, false);
 			}).on(TimingEvents.JUMPING, (_t, jumpStats) =>
 				console.log(`t: Jumping: ${jumpStats.jumpFrames} frames, ${jumpStats.jumpValue} raw value, ${jumpStats.jumpTime}ms`)
