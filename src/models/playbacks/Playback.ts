@@ -27,12 +27,10 @@ export class Playback extends EventEmitter {
 	intensity: number;
 	output: number[];
 	currentCue: number;
-	isRunning: boolean;
 
 	constructor() {
 		super();
 		this.currentCue = -1;
-		this.isRunning = false;
 		this.cues = [];
 	}
 
@@ -41,14 +39,16 @@ export class Playback extends EventEmitter {
 	}
 
 	go() {
-		if (this.isRunning) return this.transition.endNow();
+		if (this.transition) return this.transition.endNow();
 		this.currentCue = (this.currentCue + 1) % this.cues.length;
+		console.log(this.currentCue)
 
 		const transitions: Transition[] = [];
 
 		const destinationData = this.cues[this.currentCue].getDestinationValues();
 		const categoryTimings = this.cues[this.currentCue].cueTransitions;
 		destinationData.forEach((val, { channel, address }) => {
+			console.log(channel, address, val);
 			const ch = desk.patch.getChannel(channel);
 			const timings = categoryTimings.get(ch.channelMap[address].type);
 			const t = new Transition(ch.output[address].val, val, timings.duration, timings.delay);
@@ -64,12 +64,10 @@ export class Playback extends EventEmitter {
 		this.transition = new TransitionGroup(transitions, 0);
 
 		this.transition.on(TimingEvents.END, () => {
-			this.isRunning = false;
 			this.transition = null;
 		});
 
 		this.transition.trigger();
-		this.isRunning = true;
 	}
 
 	pause() {}
