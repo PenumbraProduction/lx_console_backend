@@ -75,6 +75,18 @@ export class Channel extends EventEmitter {
 		this.emit("addressUpdate", channel, this.channelMap[channel].type, this.output[channel], false);
 	}
 
+	clearStandardValues() {
+		this.output.forEach((v, i) => {
+			v.val = 0;
+			this.emit("addressUpdate", i, this.channelMap[i].type, v, false);
+		})
+	}
+
+	clearStandardValue(channel: number) {
+		this.output[channel].val = -1;
+		this.emit("addressUpdate", channel, this.channelMap[channel].type, this.output[channel], false);
+	}
+
 	getChannelsMatchType(type: FixtureChannelType) {
 		return this.channelMap.filter((ch) => ch.type == type);
 	}

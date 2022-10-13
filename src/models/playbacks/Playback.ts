@@ -41,14 +41,12 @@ export class Playback extends EventEmitter {
 	go() {
 		if (this.transition) return this.transition.endNow();
 		this.currentCue = (this.currentCue + 1) % this.cues.length;
-		console.log(this.currentCue)
 
 		const transitions: Transition[] = [];
 
 		const destinationData = this.cues[this.currentCue].getDestinationValues();
 		const categoryTimings = this.cues[this.currentCue].cueTransitions;
 		destinationData.forEach((val, { channel, address }) => {
-			console.log(channel, address, val);
 			const ch = desk.patch.getChannel(channel);
 			const timings = categoryTimings.get(ch.channelMap[address].type);
 			const t = new Transition(ch.output[address].val, val, timings.duration, timings.delay);
@@ -76,7 +74,10 @@ export class Playback extends EventEmitter {
 	resume() {}
 
 	// stop the playback affecting channelAddresses, set back to 0
-	stop() {}
+	stop() {
+		if(this.transition) this.transition.endNow();
+		desk.patch.getAllChannels().forEach(ch => ch.clearStandardValues())
+	}
 
 	// setIntensity(intensity: number) {
 	// todo: allow setting of overall intensity
