@@ -19,11 +19,15 @@ export class StackCue {
 
 	getDestinationValues(): Map<ChannelAddress, number> {
 		if (this.source.type == "raw") {
-			return this.source.content as Map<ChannelAddress, number>
+			return this.source.content as Map<ChannelAddress, number>;
 		} else {
-			const cue = desk.cues.getItem(this.source.content as number)
+			const cue = desk.cues.getItem(this.source.content as number);
 			return cue.addressValues;
 		}
+	}
+
+	static serialize(stackCue: StackCue) {
+		return { source: stackCue.source, id: stackCue.id, name: stackCue.name, cueTransitions: stackCue.cueTransitions };
 	}
 }
 

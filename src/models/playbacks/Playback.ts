@@ -12,8 +12,6 @@ export interface PlaybackEmissions {
 	itemUpdate: (item: StackCue) => void;
 
 	intensityUpdate: (intensity: number) => void;
-	requestAddressUpdate: (channelAddress: ChannelAddress, value: number) => void;
-	requestCueData: (channelAddress: ChannelAddress, value: number) => void;
 }
 
 export class Playback extends EventEmitter {
@@ -40,6 +38,7 @@ export class Playback extends EventEmitter {
 
 	go() {
 		if (this.transition) return this.transition.endNow();
+		if(this.length < 1) return;
 		this.currentCue = (this.currentCue + 1) % this.cues.length;
 
 		const transitions: Transition[] = [];
