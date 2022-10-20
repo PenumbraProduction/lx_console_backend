@@ -5,7 +5,7 @@ export class StackCue {
 	source: StackCueSource;
 	id: string;
 	name: string;
-	cueTransitions: Map<string, { delay: number; duration: number }>;
+	cueTransitions: CueTransitionData;
 
 	constructor(id: string, name: string, source: StackCueSource) {
 		this.source = source;
@@ -13,7 +13,7 @@ export class StackCue {
 		this.name = name;
 	}
 
-	setTransitionTimings(timings: Map<string, { delay: number; duration: number }>) {
+	setTransitionTimings(timings: CueTransitionData) {
 		this.cueTransitions = timings;
 	}
 
@@ -26,10 +26,12 @@ export class StackCue {
 		}
 	}
 
-	static serialize(stackCue: StackCue) {
+	static serialize(stackCue: StackCue): StackCueData {
 		return { source: stackCue.source, id: stackCue.id, name: stackCue.name, cueTransitions: stackCue.cueTransitions };
 	}
 }
 
 export type StackCueSourceType = "cue" | "raw";
 export type StackCueSource = { type: StackCueSourceType; content: number | Map<ChannelAddress, number> };
+export type CueTransitionData = Map<string, { delay: number; duration: number }>;
+export type StackCueData = { source: StackCueSource, id: string, name: string, cueTransitions: CueTransitionData }
