@@ -1,3 +1,13 @@
+/* 
+ *  This is the default license template.
+ *  
+ *  File: index.js
+ *  Author: Owner
+ *  Copyright (c) 2022 Owner
+ *  
+ *  To edit this license information: Press Ctrl+Shift+P and press 'Create new License Template...'.
+ */
+
 const util = require("util");
 
 const {Desk, Group } = require("../out");

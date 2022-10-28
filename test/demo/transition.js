@@ -1,3 +1,13 @@
+/* 
+ *  This is the default license template.
+ *  
+ *  File: transition.js
+ *  Author: Owner
+ *  Copyright (c) 2022 Owner
+ *  
+ *  To edit this license information: Press Ctrl+Shift+P and press 'Create new License Template...'.
+ */
+
 const { Transition, TimingEvents } = require("../out/models/Transition");
 
 const t = new Transition(0, 100, 5 * 1000, 0, { frames: 100 });

@@ -1,3 +1,12 @@
+/* 
+ *  This is the default license template.
+ *  
+ *  File: find_interface.js
+ *  Author: Owner
+ *  Copyright (c) 2022 Owner
+ *  
+ *  To edit this license information: Press Ctrl+Shift+P and press 'Create new License Template...'.
+ */
 
 // find device
 const {SerialPort} = require("serialport");

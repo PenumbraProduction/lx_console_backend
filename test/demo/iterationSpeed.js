@@ -1,3 +1,13 @@
+/* 
+ *  This is the default license template.
+ *  
+ *  File: iterationSpeed.js
+ *  Author: Owner
+ *  Copyright (c) 2022 Owner
+ *  
+ *  To edit this license information: Press Ctrl+Shift+P and press 'Create new License Template...'.
+ */
+
 const start = new Date();
 let i = 0
 const interval = setInterval(function(){

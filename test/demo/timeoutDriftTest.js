@@ -1,3 +1,13 @@
+/* 
+ *  This is the default license template.
+ *  
+ *  File: timeoutDriftTest.js
+ *  Author: Owner
+ *  Copyright (c) 2022 Owner
+ *  
+ *  To edit this license information: Press Ctrl+Shift+P and press 'Create new License Template...'.
+ */
+
 duration = 5000; // 5 seconds
 
 totalFrames = 100; // split into 100 `setTimeout` functions

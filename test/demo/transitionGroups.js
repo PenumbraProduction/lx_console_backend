@@ -1,3 +1,13 @@
+/* 
+ *  This is the default license template.
+ *  
+ *  File: transitionGroups.js
+ *  Author: Owner
+ *  Copyright (c) 2022 Owner
+ *  
+ *  To edit this license information: Press Ctrl+Shift+P and press 'Create new License Template...'.
+ */
+
 const { Transition, TransitionGroup, TimingEvents } = require("../out/models/Transition");
 
 const t1 = new Transition(0, 50, 5 * 1000, 0 * 1000);
