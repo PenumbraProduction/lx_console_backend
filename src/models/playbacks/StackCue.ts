@@ -14,16 +14,28 @@
  *  implementation of GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
  */
 
+import EventEmitter from "events";
 import { ChannelAddress } from "src/types";
 import { desk } from "../Desk";
 
-export class StackCue {
+export interface StackCueEmissions {
+	update: (item: StackCue) => void;
+}
+
+export class StackCue extends EventEmitter {
+	private _untypedOn = this.on;
+	private _untypedEmit = this.emit;
+	public on = <K extends keyof StackCueEmissions>(event: K, listener: StackCueEmissions[K]): this => this._untypedOn(event, listener);
+	public emit = <K extends keyof StackCueEmissions>(event: K, ...args: Parameters<StackCueEmissions[K]>): boolean => this._untypedEmit(event, ...args);
+	
 	source: StackCueSource;
 	id: string;
 	name: string;
 	cueTransitions: CueTransitionData;
 
 	constructor(id: string, name: string, source: StackCueSource) {
+		super();
+
 		this.source = source;
 		this.id = id;
 		this.name = name;
@@ -40,6 +52,11 @@ export class StackCue {
 			const cue = desk.cues.getItem(this.source.content as number);
 			return cue.addressValues;
 		}
+	}
+
+	setName(name: string) {
+		this.name = name;
+		this.emit("update", this);
 	}
 
 	static serialize(stackCue: StackCue): StackCueData {

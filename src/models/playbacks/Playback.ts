@@ -104,13 +104,19 @@ export class Playback extends EventEmitter {
 		if (this.cues.some((c) => c.id == cue.id)) throw new MapOverlapError(`Playback cue with ID '${cue.id}' already exists`);
 		this.cues.push(cue);
 		this.cues.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
+		cue.on("update", this.itemUpdateListener);
 		this.emit("itemAdd", cue);
 		return this;
 	}
 
 	removeCue(id: string): Playback {
 		this.cues = this.cues.filter((c) => c.id != id);
+		this.cues[0]?.removeListener("update", this.itemUpdateListener);
 		this.emit("itemDelete", id);
 		return this;
+	}
+
+	private itemUpdateListener(item: StackCue) {
+		this.emit("itemUpdate", item)
 	}
 }
