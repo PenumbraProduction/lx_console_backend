@@ -57,6 +57,7 @@ export class StackCue extends EventEmitter {
 	setName(name: string) {
 		this.name = name;
 		this.emit("update", this);
+		console.log("StackCue: Emitted update event")
 	}
 
 	static serialize(stackCue: StackCue): StackCueData {

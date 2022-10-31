@@ -117,6 +117,7 @@ export class Playback extends EventEmitter {
 	}
 
 	private itemUpdateListener(item: StackCue) {
+		console.log("Playback: itemUpdateListener fired")
 		this.emit("itemUpdate", item)
 	}
 }
