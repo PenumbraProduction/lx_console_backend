@@ -127,8 +127,15 @@ export class Channel extends EventEmitter {
 		return {
 			id: this.id,
 			name: this.name,
-			profile: { id: this.profile.id, options: this.profile.options, dmxAddressRange: this.dmxAddressRange }
+			dmxAddressRange: this.dmxAddressRange,
+			profile: this.profile
 		};
+	}
+
+	static saveDeserialize(data: ChannelSaveData) {
+		const ch = new Channel(data.id, data.profile, data.dmxAddressRange.initial);
+		ch.setName(data.name);
+		return ch;
 	}
 }
 export type ChannelData = {
@@ -146,5 +153,6 @@ export type ChannelData = {
 export type ChannelSaveData = {
 	id: number,
 	name: string;
-	profile: { dmxAddressRange: DmxAddressRange; options: ProfileOptions; id: string };
+	dmxAddressRange: DmxAddressRange;
+	profile: DefinedProfile;
 };

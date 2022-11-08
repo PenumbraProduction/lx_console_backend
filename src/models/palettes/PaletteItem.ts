@@ -15,7 +15,7 @@
  */
 
 import { EventEmitter } from "events";
-import { PaletteData } from "./Palette";
+import { Palette, PaletteData } from "./Palette";
 
 export interface PaletteItemManagerEmissions {
 	itemUpdate: (item: PaletteItem) => void;
@@ -58,4 +58,10 @@ export abstract class PaletteItem extends EventEmitter {
 	}
 
 	abstract saveSerialize(): any;
+	abstract saveDeserialize(data: any): void;
+}
+
+export interface PaletteItemSaveData {
+	id: number;
+	name: string;
 }

@@ -167,6 +167,15 @@ export class PatchManager extends EventEmitter {
 		const channels = Array.from(this._map).map(([n, ch]) => ch.saveSerialize());
 		return { channels };
 	}
+
+	saveDeserialize(data: PatchManagerSaveData) {
+		this._map.clear();
+		data.channels.forEach(ch => {
+			const channel = Channel.saveDeserialize(ch)
+			this._map.set(channel.id, channel);
+			this.setupChannelListeners(channel);
+		});
+	}
 }
 
 export type PatchManagerSaveData = {

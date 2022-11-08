@@ -1,16 +1,16 @@
-/* 
+/*
  *  Copyright (C) 2022  Daniel Farquharson
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 3 (GPLv3)
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
- *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an 
+ *
+ *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an
  *  implementation of GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
  */
 
@@ -27,7 +27,7 @@ export class StackCue extends EventEmitter {
 	private _untypedEmit = this.emit;
 	public on = <K extends keyof StackCueEmissions>(event: K, listener: StackCueEmissions[K]): this => this._untypedOn(event, listener);
 	public emit = <K extends keyof StackCueEmissions>(event: K, ...args: Parameters<StackCueEmissions[K]>): boolean => this._untypedEmit(event, ...args);
-	
+
 	source: StackCueSource;
 	id: string;
 	name: string;
@@ -66,12 +66,17 @@ export class StackCue extends EventEmitter {
 	static saveSerialize(stackCue: StackCue): StackCueSaveData {
 		return { source: stackCue.source, id: stackCue.id, name: stackCue.name, cueTransitions: stackCue.cueTransitions };
 	}
+
+	static saveDeserialize(data: StackCueSaveData): StackCue {
+		const sc = new StackCue(data.id, data.name, data.source);
+		sc.cueTransitions = data.cueTransitions;
+		return sc;
+	}
 }
 
 export type StackCueSourceType = "cue" | "raw";
 export type StackCueSource = { type: StackCueSourceType; content: number | Map<ChannelAddress, number> };
 export type CueTransitionData = Map<string, { delay: number; duration: number }>;
-export type StackCueData = { source: StackCueSource, id: string, name: string, cueTransitions: CueTransitionData }
+export type StackCueData = { source: StackCueSource; id: string; name: string; cueTransitions: CueTransitionData };
 
-
-export type StackCueSaveData = { source: StackCueSource, id: string, name: string, cueTransitions: CueTransitionData }
+export type StackCueSaveData = { source: StackCueSource; id: string; name: string; cueTransitions: CueTransitionData };

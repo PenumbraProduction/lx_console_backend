@@ -16,7 +16,7 @@
 
 import { EventEmitter } from "events";
 import { MapOverlapError } from "../../Errors/OverlapError";
-import { PaletteItem } from "./PaletteItem";
+import { PaletteItem, PaletteItemSaveData } from "./PaletteItem";
 
 export type PaletteData = { defaultName: string };
 
@@ -27,7 +27,7 @@ export interface PaletteManagerEmissions {
 	itemUpdate: (item: PaletteItem) => void;
 }
 
-export class Palette<itemType extends PaletteItem, itemTypeSaveData> extends EventEmitter {
+export class Palette<itemType extends PaletteItem, itemTypeSaveData extends PaletteItemSaveData> extends EventEmitter {
 	private _untypedOn = this.on;
 	private _untypedEmit = this.emit;
 	public on = <K extends keyof PaletteManagerEmissions>(
@@ -42,7 +42,7 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData> extends Eve
 	private _map: Map<number, itemType>;
 	public defaultName: string;
 
-	constructor(defaultName: string) {
+	constructor(defaultName: string, private ItemTypeConstructor: new (...args : any[]) => itemType) {
 		super();
 
 		this.defaultName = defaultName;
@@ -52,12 +52,12 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData> extends Eve
 	addItem(item: itemType): Palette<itemType, itemTypeSaveData> {
 		if (this._map.has(item.id)) throw new MapOverlapError(`Palette Map entry '${item.id}' already exists`);
 		this._map.set(item.id, item);
-		this.itemUpdateListener(item);
+		this.setupItemListeners(item);
 		this.emit("itemAdd", item);
 		return this;
 	}
 
-	private itemUpdateListener(item: itemType) {
+	private setupItemListeners(item: itemType) {
 		item.on("itemUpdate", (i) => this.emit("itemUpdate", i));
 	}
 
@@ -106,6 +106,15 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData> extends Eve
 	saveSerialize(): PaletteSaveData<itemTypeSaveData> {
 		const items = Array.from(this._map).map(([num, item]) => item.saveSerialize())
 		return {items}
+	}
+
+	saveDeserialize(data: PaletteSaveData<itemTypeSaveData>) {
+		this._map.clear()
+		data.items.forEach(i => {
+			const item = new this.ItemTypeConstructor(i.name);
+			this._map.set(i.id, item);
+			this.setupItemListeners(item);
+		});
 	}
 }
 

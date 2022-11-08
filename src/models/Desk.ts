@@ -46,15 +46,15 @@ export class Desk {
 	constructor() {
 		this.patch = new PatchManager();
 
-		this.colour = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Colour #");
-		this.beam = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Beam #");
-		this.shape = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Shape #");
-		this.position = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Position #");
-		this.function = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Function #");
-		this.uncategorised = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Uncategorised #");
+		this.colour = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Colour #", GenericPaletteItem);
+		this.beam = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Beam #", GenericPaletteItem);
+		this.shape = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Shape #", GenericPaletteItem);
+		this.position = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Position #", GenericPaletteItem);
+		this.function = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Function #", GenericPaletteItem);
+		this.uncategorised = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Uncategorised #", GenericPaletteItem);
 
-		this.groups = new Palette<GroupPaletteItem, GroupPaletteItemSaveData>("Group #");
-		this.cues = new Palette<CuePaletteItem, CuePaletteItemSaveData>("Cue #");
+		this.groups = new Palette<GroupPaletteItem, GroupPaletteItemSaveData>("Group #", GroupPaletteItem);
+		this.cues = new Palette<CuePaletteItem, CuePaletteItemSaveData>("Cue #", CuePaletteItem);
 
 		this.playbacks = new Playback();
 	}
@@ -72,6 +72,19 @@ export class Desk {
 			function: this.function.saveSerialize(),
 			uncategorised: this.uncategorised.saveSerialize()
 		};
+	}
+
+	saveDeserialize(deskData: DeskSaveData) {
+		this.patch.saveDeserialize(deskData.patch);
+		this.playbacks.saveDeserialize(deskData.playbacks);
+		this.cues.saveDeserialize(deskData.cues);
+		this.groups.saveDeserialize(deskData.groups);
+		this.colour.saveDeserialize(deskData.colour);
+		this.beam.saveDeserialize(deskData.beam);
+		this.shape.saveDeserialize(deskData.shape);
+		this.position.saveDeserialize(deskData.position);
+		this.function.saveDeserialize(deskData.function);
+		this.uncategorised.saveDeserialize(deskData.uncategorised);
 	}
 }
 
