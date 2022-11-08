@@ -27,4 +27,7 @@ export class ColourPaletteItem extends PaletteItem {
 	saveSerialize() {
 		
 	}
+	saveDeserialize(data: any): void {
+		
+	}
 }

@@ -1,16 +1,16 @@
-/* 
+/*
  *  Copyright (C) 2022  Daniel Farquharson
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 3 (GPLv3)
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
- *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an 
+ *
+ *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an
  *  implementation of GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
  */
 
@@ -47,7 +47,13 @@ export class GroupPaletteItem extends PaletteItem {
 	saveSerialize(): GroupPaletteItemSaveData {
 		return { id: this.id, channels: this.channels, name: this.name };
 	}
+
+	saveDeserialize(data: GroupPaletteItemSaveData): void {
+		this.id = data.id;
+		this.name = data.name;
+		this.channels = data.channels;
+	}
 }
 
-export type GroupData = { id: number, channels: Set<number>, name: string };
-export type GroupPaletteItemSaveData = { id: number, channels: Set<number>, name: string };
+export type GroupData = { id: number; channels: Set<number>; name: string };
+export type GroupPaletteItemSaveData = { id: number; channels: Set<number>; name: string };

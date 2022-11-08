@@ -1,16 +1,16 @@
-/* 
+/*
  *  Copyright (C) 2022  Daniel Farquharson
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 3 (GPLv3)
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
- *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an 
+ *
+ *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an
  *  implementation of GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
  */
 
@@ -18,14 +18,13 @@ import { ChannelAddress } from "../..//types";
 import { PaletteData, PaletteItem } from ".";
 
 export class PositionPaletteItem extends PaletteItem {
-    positionMap: Map<ChannelAddress, number>;
+	positionMap: Map<ChannelAddress, number>;
 
-    constructor(paletteData: PaletteData, id: number, positionMap: Map<ChannelAddress, number>) {
-        super(paletteData, id);
-        this.positionMap = positionMap;
-    }
-
-    saveSerialize() {
-		
+	constructor(paletteData: PaletteData, id: number, positionMap: Map<ChannelAddress, number>) {
+		super(paletteData, id);
+		this.positionMap = positionMap;
 	}
+
+	saveSerialize() {}
+	saveDeserialize(data: any): void {}
 }

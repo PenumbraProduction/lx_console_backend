@@ -28,4 +28,7 @@ export class BeamPaletteItem extends PaletteItem {
     saveSerialize() {
 		
 	}
+    saveDeserialize(data: any): void {
+        
+    }
 }
