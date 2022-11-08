@@ -24,4 +24,8 @@ export class PositionPaletteItem extends PaletteItem {
         super(paletteData, id);
         this.positionMap = positionMap;
     }
+
+    saveSerialize() {
+		
+	}
 }

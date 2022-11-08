@@ -57,10 +57,13 @@ export class StackCue extends EventEmitter {
 	setName(name: string) {
 		this.name = name;
 		this.emit("update", this);
-		console.log("StackCue: Emitted update event")
 	}
 
 	static serialize(stackCue: StackCue): StackCueData {
+		return { source: stackCue.source, id: stackCue.id, name: stackCue.name, cueTransitions: stackCue.cueTransitions };
+	}
+
+	static saveSerialize(stackCue: StackCue): StackCueSaveData {
 		return { source: stackCue.source, id: stackCue.id, name: stackCue.name, cueTransitions: stackCue.cueTransitions };
 	}
 }
@@ -69,3 +72,6 @@ export type StackCueSourceType = "cue" | "raw";
 export type StackCueSource = { type: StackCueSourceType; content: number | Map<ChannelAddress, number> };
 export type CueTransitionData = Map<string, { delay: number; duration: number }>;
 export type StackCueData = { source: StackCueSource, id: string, name: string, cueTransitions: CueTransitionData }
+
+
+export type StackCueSaveData = { source: StackCueSource, id: string, name: string, cueTransitions: CueTransitionData }

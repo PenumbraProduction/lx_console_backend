@@ -29,6 +29,10 @@ export class GenericPaletteItem extends PaletteItem {
 		if (!item) return null;
 		return { id: item.id, name: item.name, addressValues: item.addressValues };
 	}
+
+	saveSerialize() {
+		return { id: this.id, name: this.name, addressValues: this.addressValues };
+	}
 }
 
 export type GenericPaletteItemData = { id: number, name: string, addressValues: Map<ProfileTypeIdentifier, {addressOffset: number, value: number}> };

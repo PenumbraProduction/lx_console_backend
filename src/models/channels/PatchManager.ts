@@ -1,16 +1,16 @@
-/* 
+/*
  *  Copyright (C) 2022  Daniel Farquharson
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 3 (GPLv3)
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
- *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an 
+ *
+ *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an
  *  implementation of GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
  */
 
@@ -25,25 +25,16 @@ export interface PatchManagerEmissions {
 	patchAdd: (channel: Channel) => void;
 	patchMove: (id1: number, id2: number) => void;
 	patchDelete: (id: number | Set<number>) => void;
-	addressUpdate: (
-		address: number,
-		value: { val: number; programmerVal: number },
-		channel: Channel,
-		type: FixtureChannelType,
-		userInitiated: boolean
-	) => void;
+	addressUpdate: (address: number, value: { val: number; programmerVal: number }, channel: Channel, type: FixtureChannelType, userInitiated: boolean) => void;
 	channelNameUpdate: (id: number, name: string) => void;
 }
 
 export class PatchManager extends EventEmitter {
 	private _untypedOn = this.on;
 	private _untypedEmit = this.emit;
-	public on = <K extends keyof PatchManagerEmissions>(event: K, listener: PatchManagerEmissions[K]): this =>
-		this._untypedOn(event, listener);
-	public emit = <K extends keyof PatchManagerEmissions>(
-		event: K,
-		...args: Parameters<PatchManagerEmissions[K]>
-	): boolean => this._untypedEmit(event, ...args);
+	public on = <K extends keyof PatchManagerEmissions>(event: K, listener: PatchManagerEmissions[K]): this => this._untypedOn(event, listener);
+	public emit = <K extends keyof PatchManagerEmissions>(event: K, ...args: Parameters<PatchManagerEmissions[K]>): boolean =>
+		this._untypedEmit(event, ...args);
 
 	private _map: Map<number, Channel>;
 
@@ -60,14 +51,9 @@ export class PatchManager extends EventEmitter {
 		const final = dmxAddressStart + profile.channelModes[profile.options.channelMode].count - 1;
 
 		const isOverlap = Array.from(this._map)
-			.map(([id, channel]) =>
-				this.checkDmxAddressOverlap(channel.dmxAddressRange, { initial: dmxAddressStart, final })
-			)
+			.map(([id, channel]) => this.checkDmxAddressOverlap(channel.dmxAddressRange, { initial: dmxAddressStart, final }))
 			.some((elt) => elt);
-		if (isOverlap)
-			throw new DmxRangeOverlapError(
-				`DMX Address Range ${dmxAddressStart} > ${final} overlaps with range of existing patch fixtures`
-			);
+		if (isOverlap) throw new DmxRangeOverlapError(`DMX Address Range ${dmxAddressStart} > ${final} overlaps with range of existing patch fixtures`);
 
 		return null;
 	}
@@ -104,7 +90,7 @@ export class PatchManager extends EventEmitter {
 
 	clearProgrammerValues() {
 		this._map.forEach((ch) => {
-			ch.clearProgrammerValues()
+			ch.clearProgrammerValues();
 		});
 	}
 
@@ -121,8 +107,7 @@ export class PatchManager extends EventEmitter {
 
 	moveChannel(id1: number, id2: number): PatchManager {
 		if (!this._map.has(id1)) throw new Error(`Cannot move channel, source channel ${id1} does not exist`);
-		if (this._map.has(id2))
-			throw new MapOverlapError(`Cannot move channel, PatchManager Map entry '${id2}' already exists`);
+		if (this._map.has(id2)) throw new MapOverlapError(`Cannot move channel, PatchManager Map entry '${id2}' already exists`);
 		const ch = this._map.get(id1);
 		ch._setId(id2);
 		this._map.set(id2, ch);
@@ -156,11 +141,7 @@ export class PatchManager extends EventEmitter {
 
 	getChannelsByProfileType(profileId: string, profileOptions?: ProfileOptions): Map<number, Channel> {
 		return Array.from(this._map.values())
-			.filter(
-				(ch) =>
-					ch.profile.id == profileId &&
-					(profileOptions ? deepEqual(ch.profile.options, profileOptions) : true)
-			)
+			.filter((ch) => ch.profile.id == profileId && (profileOptions ? deepEqual(ch.profile.options, profileOptions) : true))
 			.reduce((prev, ch) => prev.set(ch.id, ch), new Map<number, Channel>());
 	}
 
@@ -180,5 +161,10 @@ export class PatchManager extends EventEmitter {
 
 	getAllChannels(): Map<number, Channel> {
 		return this._map;
+	}
+
+	saveSerialize() {
+		const channels = Array.from(this._map).map(([n, ch]) => ch.saveSerialize());
+		return { channels };
 	}
 }

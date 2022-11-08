@@ -24,4 +24,8 @@ export class BeamPaletteItem extends PaletteItem {
         super(paletteData, id);
         this.beamMap = beamMap;
     }
+
+    saveSerialize() {
+		
+	}
 }

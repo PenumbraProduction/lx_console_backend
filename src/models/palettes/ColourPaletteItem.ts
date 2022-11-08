@@ -23,4 +23,8 @@ export class ColourPaletteItem extends PaletteItem {
 		super(paletteData, id);
 		this.addressValues = addressValues;
 	}
+
+	saveSerialize() {
+		
+	}
 }

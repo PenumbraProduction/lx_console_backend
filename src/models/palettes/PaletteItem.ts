@@ -56,4 +56,6 @@ export abstract class PaletteItem extends EventEmitter {
 		this.emit("itemUpdate", this)
 		return this;
 	}
+
+	abstract saveSerialize(): any;
 }

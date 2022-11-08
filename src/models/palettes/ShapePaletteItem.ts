@@ -24,4 +24,8 @@ export class ShapePaletteItem extends PaletteItem {
         super(paletteData, id);
         this.shapeMap = shapeMap;
     }
+
+    saveSerialize() {
+		
+	}
 }

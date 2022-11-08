@@ -125,6 +125,14 @@ export class Channel extends EventEmitter {
 			output: ch.output
 		};
 	}
+
+	saveSerialize() {
+		return {
+			id: this.id,
+			name: this.name,
+			profile: this.profile
+		}
+	}
 }
 export type ChannelData = {
 	channel: number;

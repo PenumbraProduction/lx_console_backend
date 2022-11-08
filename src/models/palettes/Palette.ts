@@ -102,4 +102,9 @@ export class Palette<itemType extends PaletteItem> extends EventEmitter {
 	getPaletteData(): PaletteData {
 		return {defaultName: this.defaultName}
 	}
+
+	saveSerialize() {
+		const items = Array.from(this._map).map(([num, item]) => item.saveSerialize())
+		return {items}
+	}
 }

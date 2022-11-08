@@ -43,6 +43,10 @@ export class GroupPaletteItem extends PaletteItem {
 	static serialize(group: GroupPaletteItem): GroupData {
 		return { id: group.id, channels: group.channels, name: group.name };
 	}
+
+	saveSerialize() {
+		return { id: this.id, channels: this.channels, name: this.name };
+	}
 }
 
 export type GroupData = { id: number, channels: Set<number>, name: string };

@@ -40,6 +40,14 @@ export class CuePaletteItem extends PaletteItem {
 			addressValues: item.addressValues /*, mimicPalettes: item.mimicPalettes */
 		};
 	}
+
+	saveSerialize() {
+		return {
+			id: this.id,
+			name: this.name,
+			addressValues: this.addressValues
+		};
+	}
 }
 
 export type CuePaletteItemData = {

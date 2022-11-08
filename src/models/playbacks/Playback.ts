@@ -118,6 +118,10 @@ export class Playback extends EventEmitter {
 
 	private itemUpdateListener(item: StackCue) {
 		console.log("Playback: itemUpdateListener fired")
-		this.emit("itemUpdate", item)
+		this.emit("itemUpdate", item);
+	}
+
+	saveSerialize() {
+		return {cues: this.cues.map(c => StackCue.saveSerialize(c))}
 	}
 }
