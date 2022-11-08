@@ -27,7 +27,7 @@ export interface PaletteManagerEmissions {
 	itemUpdate: (item: PaletteItem) => void;
 }
 
-export class Palette<itemType extends PaletteItem> extends EventEmitter {
+export class Palette<itemType extends PaletteItem, itemTypeSaveData> extends EventEmitter {
 	private _untypedOn = this.on;
 	private _untypedEmit = this.emit;
 	public on = <K extends keyof PaletteManagerEmissions>(
@@ -49,7 +49,7 @@ export class Palette<itemType extends PaletteItem> extends EventEmitter {
 		this._map = new Map<number, itemType>();
 	}
 
-	addItem(item: itemType): Palette<itemType> {
+	addItem(item: itemType): Palette<itemType, itemTypeSaveData> {
 		if (this._map.has(item.id)) throw new MapOverlapError(`Palette Map entry '${item.id}' already exists`);
 		this._map.set(item.id, item);
 		this.itemUpdateListener(item);
@@ -61,7 +61,7 @@ export class Palette<itemType extends PaletteItem> extends EventEmitter {
 		item.on("itemUpdate", (i) => this.emit("itemUpdate", i));
 	}
 
-	moveItem(id1: number, id2: number): Palette<itemType> {
+	moveItem(id1: number, id2: number): Palette<itemType, itemTypeSaveData> {
 		if (!this._map.has(id1)) throw new Error(`Cannot move item, source item ${id1} does not exist`);
 		if (this._map.has(id2))
 			throw new MapOverlapError(`Cannot move item, Palette Map entry '${id2}' already exists`);
@@ -73,13 +73,13 @@ export class Palette<itemType extends PaletteItem> extends EventEmitter {
 		return this;
 	}
 
-	removeItem(id: number): Palette<itemType> {
+	removeItem(id: number): Palette<itemType, itemTypeSaveData> {
 		this._map.delete(id);
 		this.emit("itemDelete", id);
 		return this;
 	}
 
-	removeItems(ids: Set<number>): Palette<itemType> {
+	removeItems(ids: Set<number>): Palette<itemType, itemTypeSaveData> {
 		ids.forEach((id) => this._map.delete(id));
 		this.emit("itemDelete", ids);
 		return this;
@@ -103,8 +103,12 @@ export class Palette<itemType extends PaletteItem> extends EventEmitter {
 		return {defaultName: this.defaultName}
 	}
 
-	saveSerialize() {
+	saveSerialize(): PaletteSaveData<itemTypeSaveData> {
 		const items = Array.from(this._map).map(([num, item]) => item.saveSerialize())
 		return {items}
 	}
+}
+
+export type PaletteSaveData<it> = {
+	items: it[]
 }

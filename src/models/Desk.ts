@@ -15,42 +15,51 @@
  */
 
 import { PatchManager, PatchManagerSaveData } from "./channels/PatchManager";
-import { CuePaletteItem, CuePaletteItemSaveData, GenericPaletteItem, GenericPaletteItemSaveData, GroupPaletteItem, GroupSaveData, Palette } from "./palettes";
+import {
+	CuePaletteItem,
+	CuePaletteItemSaveData,
+	GenericPaletteItem,
+	GenericPaletteItemSaveData,
+	GroupPaletteItem,
+	GroupPaletteItemSaveData,
+	Palette,
+	PaletteSaveData
+} from "./palettes";
 import { Playback, PlaybackSaveData } from "./playbacks";
 
 export class Desk {
 	patch: PatchManager;
 
-	groups: Palette<GroupPaletteItem>;
+	groups: Palette<GroupPaletteItem, GroupPaletteItemSaveData>;
 
-	cues: Palette<CuePaletteItem>;
+	cues: Palette<CuePaletteItem, CuePaletteItemSaveData>;
 	// playbacks: PlaybackManager;
 	playbacks: Playback;
 
-	colour: Palette<GenericPaletteItem>;
-	beam: Palette<GenericPaletteItem>;
-	shape: Palette<GenericPaletteItem>;
-	position: Palette<GenericPaletteItem>;
-	function: Palette<GenericPaletteItem>;
-	uncategorised: Palette<GenericPaletteItem>;
+	colour: Palette<GenericPaletteItem, GenericPaletteItemSaveData>;
+	beam: Palette<GenericPaletteItem, GenericPaletteItemSaveData>;
+	shape: Palette<GenericPaletteItem, GenericPaletteItemSaveData>;
+	position: Palette<GenericPaletteItem, GenericPaletteItemSaveData>;
+	function: Palette<GenericPaletteItem, GenericPaletteItemSaveData>;
+	uncategorised: Palette<GenericPaletteItem, GenericPaletteItemSaveData>;
 
 	constructor() {
 		this.patch = new PatchManager();
 
-		this.colour = new Palette<GenericPaletteItem>("Colour #");
-		this.beam = new Palette<GenericPaletteItem>("Beam #");
-		this.shape = new Palette<GenericPaletteItem>("Shape #");
-		this.position = new Palette<GenericPaletteItem>("Position #");
-		this.function = new Palette<GenericPaletteItem>("Function #");
-		this.uncategorised = new Palette<GenericPaletteItem>("Uncategorised #");
+		this.colour = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Colour #");
+		this.beam = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Beam #");
+		this.shape = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Shape #");
+		this.position = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Position #");
+		this.function = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Function #");
+		this.uncategorised = new Palette<GenericPaletteItem, GenericPaletteItemSaveData>("Uncategorised #");
 
-		this.groups = new Palette<GroupPaletteItem>("Group #");
-		this.cues = new Palette<CuePaletteItem>("Cue #");
+		this.groups = new Palette<GroupPaletteItem, GroupPaletteItemSaveData>("Group #");
+		this.cues = new Palette<CuePaletteItem, CuePaletteItemSaveData>("Cue #");
 
 		this.playbacks = new Playback();
 	}
 
-	saveSerialize() {
+	saveSerialize(): DeskSaveData {
 		return {
 			patch: this.patch.saveSerialize(),
 			playbacks: this.playbacks.saveSerialize(),
@@ -66,17 +75,17 @@ export class Desk {
 	}
 }
 
-export type deskSaveData = {
-	patch: PatchManagerSaveData,
-	playbacks: PlaybackSaveData
-	cues: CuePaletteItemSaveData,
-	groups: GroupSaveData,
-	colour: GenericPaletteItemSaveData,
-	beam: GenericPaletteItemSaveData,
-	shape: GenericPaletteItemSaveData,
-	position: GenericPaletteItemSaveData
-	function: GenericPaletteItemSaveData,
-	uncategorised: GenericPaletteItemSaveData,
-}
+export type DeskSaveData = {
+	patch: PatchManagerSaveData;
+	playbacks: PlaybackSaveData;
+	cues: PaletteSaveData<CuePaletteItemSaveData>;
+	groups: PaletteSaveData<GroupPaletteItemSaveData>;
+	colour: PaletteSaveData<GenericPaletteItemSaveData>;
+	beam: PaletteSaveData<GenericPaletteItemSaveData>;
+	shape: PaletteSaveData<GenericPaletteItemSaveData>;
+	position: PaletteSaveData<GenericPaletteItemSaveData>;
+	function: PaletteSaveData<GenericPaletteItemSaveData>;
+	uncategorised: PaletteSaveData<GenericPaletteItemSaveData>;
+};
 
 export const desk = new Desk();
