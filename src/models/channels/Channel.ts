@@ -1,22 +1,22 @@
-/* 
+/*
  *  Copyright (C) 2022  Daniel Farquharson
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 3 (GPLv3)
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
- *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an 
+ *
+ *  See https://github.com/LordFarquhar/lx_console_app/blob/main/LICENSE an
  *  implementation of GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
  */
 
 import { EventEmitter } from "events";
 import { InvalidDMXError } from "../../Errors/InvalidDMXError";
-import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, FixtureChannelTypes } from "../../types";
+import { DefinedProfile, DmxAddressRange, FixtureChannel, FixtureChannelType, FixtureChannelTypes, ProfileOptions } from "../../types";
 
 export interface ChannelEmissions {
 	addressUpdate: (address: number, type: FixtureChannelType, value: { val: number; programmerVal: number }, userInitiated: boolean) => void;
@@ -26,10 +26,8 @@ export interface ChannelEmissions {
 export class Channel extends EventEmitter {
 	private _untypedOn = this.on;
 	private _untypedEmit = this.emit;
-	public on = <K extends keyof ChannelEmissions>(event: K, listener: ChannelEmissions[K]): this =>
-		this._untypedOn(event, listener);
-	public emit = <K extends keyof ChannelEmissions>(event: K, ...args: Parameters<ChannelEmissions[K]>): boolean =>
-		this._untypedEmit(event, ...args);
+	public on = <K extends keyof ChannelEmissions>(event: K, listener: ChannelEmissions[K]): this => this._untypedOn(event, listener);
+	public emit = <K extends keyof ChannelEmissions>(event: K, ...args: Parameters<ChannelEmissions[K]>): boolean => this._untypedEmit(event, ...args);
 
 	id: number;
 	name: string;
@@ -72,8 +70,7 @@ export class Channel extends EventEmitter {
 	}
 
 	setAddress(addressOffset: number, val: number, userInitiated: boolean) {
-		if (!this.channelMap[addressOffset])
-			throw new InvalidDMXError(`Address Offset ${addressOffset} does not exist in channelMap in this mode`);
+		if (!this.channelMap[addressOffset]) throw new InvalidDMXError(`Address Offset ${addressOffset} does not exist in channelMap in this mode`);
 		if (userInitiated) this.output[addressOffset].programmerVal = val;
 		else this.output[addressOffset].val = val;
 		this.emit(`addressUpdate`, addressOffset, this.channelMap[addressOffset].type, this.output[addressOffset], userInitiated);
@@ -95,7 +92,7 @@ export class Channel extends EventEmitter {
 		this.output.forEach((v, i) => {
 			v.val = 0;
 			this.emit("addressUpdate", i, this.channelMap[i].type, v, false);
-		})
+		});
 	}
 
 	clearStandardValue(channel: number) {
@@ -126,12 +123,12 @@ export class Channel extends EventEmitter {
 		};
 	}
 
-	saveSerialize() {
+	saveSerialize(): ChannelSaveData {
 		return {
 			id: this.id,
 			name: this.name,
-			profile: {id: this.profile.id, options: this.profile.options, dmxAddressRange: this.dmxAddressRange}
-		}
+			profile: { id: this.profile.id, options: this.profile.options, dmxAddressRange: this.dmxAddressRange }
+		};
 	}
 }
 export type ChannelData = {
@@ -144,4 +141,10 @@ export type ChannelData = {
 		val: number;
 		programmerVal: number;
 	}[];
+};
+
+export type ChannelSaveData = {
+	id: number,
+	name: string;
+	profile: { dmxAddressRange: DmxAddressRange; options: ProfileOptions; id: string };
 };

@@ -30,9 +30,10 @@ export class GenericPaletteItem extends PaletteItem {
 		return { id: item.id, name: item.name, addressValues: item.addressValues };
 	}
 
-	saveSerialize() {
+	saveSerialize(): GenericPaletteItemSaveData {
 		return { id: this.id, name: this.name, addressValues: this.addressValues };
 	}
 }
 
 export type GenericPaletteItemData = { id: number, name: string, addressValues: Map<ProfileTypeIdentifier, {addressOffset: number, value: number}> };
+export type GenericPaletteItemSaveData = { id: number, name: string, addressValues: Map<ProfileTypeIdentifier, {addressOffset: number, value: number}> };

@@ -17,7 +17,7 @@
 import EventEmitter from "events";
 import { ChannelAddress } from "../../types";
 import { MapOverlapError } from "../../Errors/OverlapError";
-import { StackCue } from "./StackCue";
+import { StackCue, StackCueSaveData } from "./StackCue";
 import { TimingEvents, Transition, TransitionGroup } from "../Transition";
 import { desk } from "../Desk";
 
@@ -121,7 +121,11 @@ export class Playback extends EventEmitter {
 		this.emit("itemUpdate", item);
 	}
 
-	saveSerialize() {
+	saveSerialize(): PlaybackSaveData {
 		return {cues: this.cues.map(c => StackCue.saveSerialize(c))}
 	}
+}
+
+export type PlaybackSaveData = {
+	cues: StackCueSaveData[]
 }

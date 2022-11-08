@@ -14,9 +14,9 @@
  *  implementation of GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
  */
 
-import { PatchManager } from "./channels/PatchManager";
-import { CuePaletteItem, GenericPaletteItem, GroupPaletteItem, Palette } from "./palettes";
-import { Playback } from "./playbacks";
+import { PatchManager, PatchManagerSaveData } from "./channels/PatchManager";
+import { CuePaletteItem, CuePaletteItemSaveData, GenericPaletteItem, GenericPaletteItemSaveData, GroupPaletteItem, GroupSaveData, Palette } from "./palettes";
+import { Playback, PlaybackSaveData } from "./playbacks";
 
 export class Desk {
 	patch: PatchManager;
@@ -64,6 +64,19 @@ export class Desk {
 			uncategorised: this.uncategorised.saveSerialize()
 		};
 	}
+}
+
+export type deskSaveData = {
+	patch: PatchManagerSaveData,
+	playbacks: PlaybackSaveData
+	cues: CuePaletteItemSaveData,
+	groups: GroupSaveData,
+	colour: GenericPaletteItemSaveData,
+	beam: GenericPaletteItemSaveData,
+	shape: GenericPaletteItemSaveData,
+	position: GenericPaletteItemSaveData
+	function: GenericPaletteItemSaveData,
+	uncategorised: GenericPaletteItemSaveData,
 }
 
 export const desk = new Desk();

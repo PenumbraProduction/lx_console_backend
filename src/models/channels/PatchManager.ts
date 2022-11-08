@@ -19,7 +19,7 @@ import { DmxAddressRange, DefinedProfile, FixtureChannelType, ProfileOptions } f
 import { DmxRangeOverlapError, MapOverlapError } from "../../Errors/OverlapError";
 import deepEqual from "deep-equal";
 
-import { Channel } from "./Channel";
+import { Channel, ChannelData, ChannelSaveData } from "./Channel";
 
 export interface PatchManagerEmissions {
 	patchAdd: (channel: Channel) => void;
@@ -163,8 +163,12 @@ export class PatchManager extends EventEmitter {
 		return this._map;
 	}
 
-	saveSerialize() {
+	saveSerialize(): PatchManagerSaveData {
 		const channels = Array.from(this._map).map(([n, ch]) => ch.saveSerialize());
 		return { channels };
 	}
 }
+
+export type PatchManagerSaveData = {
+	channels: ChannelSaveData[];
+};

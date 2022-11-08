@@ -41,7 +41,7 @@ export class CuePaletteItem extends PaletteItem {
 		};
 	}
 
-	saveSerialize() {
+	saveSerialize(): CuePaletteItemSaveData {
 		return {
 			id: this.id,
 			name: this.name,
@@ -51,6 +51,13 @@ export class CuePaletteItem extends PaletteItem {
 }
 
 export type CuePaletteItemData = {
+	id: number;
+	name: string;
+	addressValues: Map<ChannelAddress, number>;
+	// mimicPalettes: { category: string; id: number }[];
+};
+
+export type CuePaletteItemSaveData = {
 	id: number;
 	name: string;
 	addressValues: Map<ChannelAddress, number>;
