@@ -50,7 +50,7 @@ export class Desk {
 		this.playbacks = new Playback();
 	}
 
-	saveSerialize(d: Desk) {
+	saveSerialize() {
 		return {
 			patch: this.patch.saveSerialize(),
 			playbacks: this.playbacks.saveSerialize(),
