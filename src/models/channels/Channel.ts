@@ -130,7 +130,7 @@ export class Channel extends EventEmitter {
 		return {
 			id: this.id,
 			name: this.name,
-			profile: {id: this.profile.id, options: this.profile.options}
+			profile: {id: this.profile.id, options: this.profile.options, dmxAddressRange: this.dmxAddressRange}
 		}
 	}
 }
