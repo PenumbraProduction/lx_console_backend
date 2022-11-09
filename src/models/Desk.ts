@@ -75,30 +75,30 @@ export class Desk {
 	}
 
 	saveDeserialize(deskData: DeskSaveData) {
-		this.patch.saveDeserialize(deskData.patch);
-		this.playbacks.saveDeserialize(deskData.playbacks);
-		this.cues.saveDeserialize(deskData.cues);
-		this.groups.saveDeserialize(deskData.groups);
-		this.colour.saveDeserialize(deskData.colour);
-		this.beam.saveDeserialize(deskData.beam);
-		this.shape.saveDeserialize(deskData.shape);
-		this.position.saveDeserialize(deskData.position);
-		this.function.saveDeserialize(deskData.function);
-		this.uncategorised.saveDeserialize(deskData.uncategorised);
+		if(deskData.patch) this.patch.saveDeserialize(deskData.patch);
+		if(deskData.playbacks) this.playbacks.saveDeserialize(deskData.playbacks);
+		if(deskData.cues) this.cues.saveDeserialize(deskData.cues);
+		if(deskData.groups) this.groups.saveDeserialize(deskData.groups);
+		if(deskData.colour) this.colour.saveDeserialize(deskData.colour);
+		if(deskData.beam) this.beam.saveDeserialize(deskData.beam);
+		if(deskData.shape) this.shape.saveDeserialize(deskData.shape);
+		if(deskData.position) this.position.saveDeserialize(deskData.position);
+		if(deskData.function) this.function.saveDeserialize(deskData.function);
+		if(deskData.uncategorised) this.uncategorised.saveDeserialize(deskData.uncategorised);
 	}
 }
 
 export type DeskSaveData = {
-	patch: PatchManagerSaveData;
-	playbacks: PlaybackSaveData;
-	cues: PaletteSaveData<CuePaletteItemSaveData>;
-	groups: PaletteSaveData<GroupPaletteItemSaveData>;
-	colour: PaletteSaveData<GenericPaletteItemSaveData>;
-	beam: PaletteSaveData<GenericPaletteItemSaveData>;
-	shape: PaletteSaveData<GenericPaletteItemSaveData>;
-	position: PaletteSaveData<GenericPaletteItemSaveData>;
-	function: PaletteSaveData<GenericPaletteItemSaveData>;
-	uncategorised: PaletteSaveData<GenericPaletteItemSaveData>;
+	patch?: PatchManagerSaveData;
+	playbacks?: PlaybackSaveData;
+	cues?: PaletteSaveData<CuePaletteItemSaveData>;
+	groups?: PaletteSaveData<GroupPaletteItemSaveData>;
+	colour?: PaletteSaveData<GenericPaletteItemSaveData>;
+	beam?: PaletteSaveData<GenericPaletteItemSaveData>;
+	shape?: PaletteSaveData<GenericPaletteItemSaveData>;
+	position?: PaletteSaveData<GenericPaletteItemSaveData>;
+	function?: PaletteSaveData<GenericPaletteItemSaveData>;
+	uncategorised?: PaletteSaveData<GenericPaletteItemSaveData>;
 };
 
 export const desk = new Desk();

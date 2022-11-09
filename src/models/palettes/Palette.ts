@@ -110,6 +110,7 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData extends Pale
 
 	saveDeserialize(data: PaletteSaveData<itemTypeSaveData>) {
 		this._map.clear()
+		if(!data.items || !data.items.length) return;
 		data.items.forEach(i => {
 			const item = new this.ItemTypeConstructor(i.name);
 			this._map.set(i.id, item);

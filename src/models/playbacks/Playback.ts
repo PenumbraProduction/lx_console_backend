@@ -130,6 +130,7 @@ export class Playback extends EventEmitter {
 	}
 
 	saveDeserialize(data: PlaybackSaveData) {
+		if(!data.cues || !data.cues.length) return;
 		this.cues = data.cues.map((c) => StackCue.saveDeserialize(c));
 		this.cues.forEach((c) => this.setupChannelListeners(c));
 		this.currentCue = -1;
