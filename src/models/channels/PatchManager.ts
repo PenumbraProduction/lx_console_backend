@@ -163,6 +163,10 @@ export class PatchManager extends EventEmitter {
 		return this._map;
 	}
 
+	clearAll() {
+		this._map.clear();
+	}
+
 	saveSerialize(): PatchManagerSaveData {
 		const channels = Array.from(this._map).map(([n, ch]) => ch.saveSerialize());
 		return { channels };

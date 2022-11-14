@@ -125,6 +125,12 @@ export class Playback extends EventEmitter {
 		this.emit("itemUpdate", item);
 	}
 
+	clearAll() {
+		this.cues.length = 0;
+		this.currentCue = -1
+		this.output = []
+	}
+
 	saveSerialize(): PlaybackSaveData {
 		return { cues: this.cues.map((c) => StackCue.saveSerialize(c)) };
 	}

@@ -103,6 +103,10 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData extends Pale
 		return {defaultName: this.defaultName}
 	}
 
+	clearAll() {
+		this._map.clear();
+	}
+
 	saveSerialize(): PaletteSaveData<itemTypeSaveData> {
 		const items = Array.from(this._map).map(([num, item]) => item.saveSerialize())
 		return {items}

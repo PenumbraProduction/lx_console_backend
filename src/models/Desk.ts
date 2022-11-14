@@ -59,6 +59,19 @@ export class Desk {
 		this.playbacks = new Playback();
 	}
 
+	clearAll() {
+		this.patch.clearAll();
+		this.playbacks.clearAll();
+		this.cues.clearAll();
+		this.groups.clearAll();
+		this.colour.clearAll();
+		this.beam.clearAll();
+		this.shape.clearAll();
+		this.position.clearAll();
+		this.function.clearAll();
+		this.uncategorised.clearAll();
+	}
+
 	saveSerialize(): DeskSaveData {
 		return {
 			patch: this.patch.saveSerialize(),
@@ -75,16 +88,16 @@ export class Desk {
 	}
 
 	saveDeserialize(deskData: DeskSaveData) {
-		if(deskData.patch) this.patch.saveDeserialize(deskData.patch);
-		if(deskData.playbacks) this.playbacks.saveDeserialize(deskData.playbacks);
-		if(deskData.cues) this.cues.saveDeserialize(deskData.cues);
-		if(deskData.groups) this.groups.saveDeserialize(deskData.groups);
-		if(deskData.colour) this.colour.saveDeserialize(deskData.colour);
-		if(deskData.beam) this.beam.saveDeserialize(deskData.beam);
-		if(deskData.shape) this.shape.saveDeserialize(deskData.shape);
-		if(deskData.position) this.position.saveDeserialize(deskData.position);
-		if(deskData.function) this.function.saveDeserialize(deskData.function);
-		if(deskData.uncategorised) this.uncategorised.saveDeserialize(deskData.uncategorised);
+		if (deskData.patch) this.patch.saveDeserialize(deskData.patch);
+		if (deskData.playbacks) this.playbacks.saveDeserialize(deskData.playbacks);
+		if (deskData.cues) this.cues.saveDeserialize(deskData.cues);
+		if (deskData.groups) this.groups.saveDeserialize(deskData.groups);
+		if (deskData.colour) this.colour.saveDeserialize(deskData.colour);
+		if (deskData.beam) this.beam.saveDeserialize(deskData.beam);
+		if (deskData.shape) this.shape.saveDeserialize(deskData.shape);
+		if (deskData.position) this.position.saveDeserialize(deskData.position);
+		if (deskData.function) this.function.saveDeserialize(deskData.function);
+		if (deskData.uncategorised) this.uncategorised.saveDeserialize(deskData.uncategorised);
 	}
 }
 
