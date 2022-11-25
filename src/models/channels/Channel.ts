@@ -50,9 +50,9 @@ export class Channel extends EventEmitter {
 			if (!FixtureChannelTypes.includes(ch.type)) ch.type = "UNKNOWN";
 			return ch;
 		});
-		this.channelMap = profile.channelModes[profile.options.channelMode].channels.map((chNo) => {
+		this.channelMap = profile.channelModes[profile.options.channelMode].channels.map((chNo, i) => {
 			const ch = this.profile.channels[chNo];
-			ch.addressOffset = chNo;
+			ch.addressOffset = i;
 			return ch;
 		});
 		this.output = [...Array(this.channelMap.length)].map((v) => (v = { val: 0, programmerVal: -1 }));
