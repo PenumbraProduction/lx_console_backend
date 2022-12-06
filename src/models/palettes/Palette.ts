@@ -45,7 +45,7 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData extends Pale
 	constructor(defaultName: string, private ItemTypeConstructor: new (...args : any[]) => itemType) {
 		super();
 
-		this.defaultName = defaultName;
+		this.defaultName = defaultName ? defaultName : "Unknown Palette #";
 		this._map = new Map<number, itemType>();
 	}
 
@@ -116,7 +116,7 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData extends Pale
 		this._map.clear()
 		if(!data.items || !data.items.length) return;
 		data.items.forEach(i => {
-			const item = new this.ItemTypeConstructor(i.name);
+			const item = new this.ItemTypeConstructor({defaultName: this.defaultName}, i.name);
 			this._map.set(i.id, item);
 			this.setupItemListeners(item);
 		});

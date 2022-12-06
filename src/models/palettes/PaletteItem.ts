@@ -41,7 +41,7 @@ export abstract class PaletteItem extends EventEmitter {
         super();
 		this.parentData = parentData;
 		this.id = id;
-		this.name = this.parentData.defaultName.replace("#", this.id.toString());
+		this.name = this.parentData.defaultName ? this.parentData.defaultName.replace("#", this.id.toString()) : this.id.toString();
 	}
 
 	_setId(id: number): PaletteItem {
