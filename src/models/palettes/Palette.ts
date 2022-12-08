@@ -118,7 +118,8 @@ export class Palette<itemType extends PaletteItem, itemTypeSaveData extends Pale
 		data.items.forEach(i => {
 			const item = new this.ItemTypeConstructor({defaultName: this.defaultName}, i.id);
 			this._map.set(i.id, item);
-			item.name = i.name;
+			// item.name = i.name;
+			item.saveDeserialize(i)
 			this.setupItemListeners(item);
 		});
 	}
