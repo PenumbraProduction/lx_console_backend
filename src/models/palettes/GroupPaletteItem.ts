@@ -45,15 +45,15 @@ export class GroupPaletteItem extends PaletteItem {
 	}
 
 	saveSerialize(): GroupPaletteItemSaveData {
-		return { id: this.id, channels: this.channels, name: this.name };
+		return { id: this.id, channels: Array.from(this.channels), name: this.name };
 	}
 
 	saveDeserialize(data: GroupPaletteItemSaveData): void {
 		this.id = data.id;
 		this.name = data.name;
-		this.channels = data.channels;
+		this.channels = new Set(data.channels);
 	}
 }
 
 export type GroupData = { id: number; channels: Set<number>; name: string };
-export type GroupPaletteItemSaveData = { id: number; channels: Set<number>; name: string };
+export type GroupPaletteItemSaveData = { id: number; channels: Array<number>; name: string };
