@@ -31,15 +31,15 @@ export class GenericPaletteItem extends PaletteItem {
 	}
 
 	saveSerialize(): GenericPaletteItemSaveData {
-		return { id: this.id, name: this.name, addressValues: this.addressValues };
+		return { id: this.id, name: this.name, addressValues: Array.from(this.addressValues) };
 	}
 
 	saveDeserialize(data: GenericPaletteItemSaveData) {
 		this.id = data.id;
-		this.addressValues = data.addressValues;
+		this.addressValues = new Map(data.addressValues);
 		this.name = data.name;
 	}
 }
 
 export type GenericPaletteItemData = { id: number; name: string; addressValues: Map<ProfileTypeIdentifier, { addressOffset: number; value: number }> };
-export type GenericPaletteItemSaveData = { id: number; name: string; addressValues: Map<ProfileTypeIdentifier, { addressOffset: number; value: number }> };
+export type GenericPaletteItemSaveData = { id: number; name: string; addressValues: [ProfileTypeIdentifier, { addressOffset: number; value: number }][] };
