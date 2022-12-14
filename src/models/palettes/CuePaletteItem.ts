@@ -45,14 +45,14 @@ export class CuePaletteItem extends PaletteItem {
 		return {
 			id: this.id,
 			name: this.name,
-			addressValues: this.addressValues
+			addressValues: Array.from(this.addressValues)
 		};
 	}
 
 	saveDeserialize(data: CuePaletteItemSaveData): void {
 		this.id = data.id;
 		this.name = data.name;
-		this.addressValues = data.addressValues;
+		this.addressValues = new Map(data.addressValues);
 	}
 }
 
@@ -66,6 +66,6 @@ export type CuePaletteItemData = {
 export type CuePaletteItemSaveData = {
 	id: number;
 	name: string;
-	addressValues: Map<ChannelAddress, number>;
+	addressValues: [ChannelAddress, number][];
 	// mimicPalettes: { category: string; id: number }[];
 };

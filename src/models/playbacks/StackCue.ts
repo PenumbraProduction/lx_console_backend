@@ -64,12 +64,12 @@ export class StackCue extends EventEmitter {
 	}
 
 	static saveSerialize(stackCue: StackCue): StackCueSaveData {
-		return { source: stackCue.source, id: stackCue.id, name: stackCue.name, cueTransitions: stackCue.cueTransitions };
+		return { source: stackCue.source, id: stackCue.id, name: stackCue.name, cueTransitions: Array.from(stackCue.cueTransitions) };
 	}
 
 	static saveDeserialize(data: StackCueSaveData): StackCue {
 		const sc = new StackCue(data.id, data.name, data.source);
-		sc.cueTransitions = data.cueTransitions;
+		sc.cueTransitions = new Map(data.cueTransitions);
 		return sc;
 	}
 }
@@ -79,4 +79,4 @@ export type StackCueSource = { type: StackCueSourceType; content: number | Map<C
 export type CueTransitionData = Map<string, { delay: number; duration: number }>;
 export type StackCueData = { source: StackCueSource; id: string; name: string; cueTransitions: CueTransitionData };
 
-export type StackCueSaveData = { source: StackCueSource; id: string; name: string; cueTransitions: CueTransitionData };
+export type StackCueSaveData = { source: StackCueSource; id: string; name: string; cueTransitions: [string, { delay: number; duration: number }][] };
